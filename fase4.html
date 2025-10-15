@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4: Reconexão e Direcionamento</title>
+    <style>
+        /* Reset e configurações básicas */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Estrelas no fundo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Cabeçalho */
+        .module-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 30px;
+            border-bottom: 2px solid #D4AF37;
+            position: relative;
+        }
+        
+        .module-title {
+            font-size: 2.8rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .module-subtitle {
+            font-size: 1.5rem;
+            color: #fff;
+            font-style: italic;
+        }
+        
+        /* Seções */
+        .section {
+            margin-bottom: 60px;
+            padding: 30px;
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            border-left: 4px solid #D4AF37;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #D4AF37;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .section-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        /* Cards */
+        .card {
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+        
+        .card-content {
+            color: #ddd;
+        }
+        
+        /* Infográficos */
+        .infographics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .infographic-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .infographic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #D4AF37, #FFD700, #D4AF37);
+        }
+        
+        .infographic-title {
+            font-size: 1.3rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        /* Níveis de Profundidade */
+        .levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .level-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(40, 40, 40, 0.9));
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .level-title {
+            font-size: 1.4rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .level-features {
+            list-style-type: none;
+        }
+        
+        .level-features li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .level-features li::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .module-title {
+                font-size: 2.2rem;
+            }
+            
+            .module-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .infographics, .levels {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo com estrelas -->
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <!-- Cabeçalho do Módulo -->
+        <header class="module-header">
+            <h1 class="module-title">Módulo 4: Reconexão e Direcionamento</h1>
+            <p class="module-subtitle">"Resignificando sua Jornada"</p>
+        </header>
+        
+        <!-- Mapa de Significados Pessoais -->
+        <section class="section">
+            <h2 class="section-title">Mapa de Significados Pessoais</h2>
+            <div class="section-content">
+                <div class="card">
+                    <h3 class="card-title">Visualização Interativa dos Valores Descobertos</h3>
+                    <p class="card-content">
+                        Crie uma representação visual dinâmica dos valores essenciais que emergiram ao longo da sua jornada. 
+                        Esta ferramenta interativa permite conectar, hierarquizar e explorar as relações entre seus valores 
+                        fundamentais, criando um mapa pessoal único que orientará suas futuras decisões e direcionamentos.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Exercício de Projeção Fenomenológica -->
+        <section class="section">
+            <h2 class="section-title">Exercício de Projeção Fenomenológica</h2>
+            <div class="section-content">
+                <div class="card">
+                    <h3 class="card-title">"Como seria estudar se você criasse as regras?"</h3>
+                    <p class="card-content">
+                        Imagine um cenário onde você tem total liberdade para definir como, quando, onde e o que estudar. 
+                        Através deste exercício fenomenológico, você explorará possibilidades educacionais sem as limitações 
+                        dos construtos sociais atuais, permitindo que sua essência (Eidos) guie a criação de uma abordagem 
+                        de aprendizado verdadeiramente pessoal e significativa.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Infográficos Interativos -->
+        <section class="section">
+            <h2 class="section-title">Infográficos Interativos</h2>
+            <div class="infographics">
+                <div class="infographic-card">
+                    <h3 class="infographic-title">Anatomia de um Construto Social</h3>
+                    <p>Explore a estrutura, formação e influência dos construtos sociais em sua vida educacional.</p>
+                </div>
+                <div class="infographic-card">
+                    <h3 class="infographic-title">Fluxo da Redução Fenomenológica</h3>
+                    <p>Visualize o processo de suspensão do juízo e acesso à experiência pura da fenomenologia.</p>
+                </div>
+                <div class="infographic-card">
+                    <h3 class="infographic-title">Mapa de Signos da Educação</h3>
+                    <p>Navegue pelos símbolos, significados e significantes que compõem o universo educacional.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Níveis de Profundidade -->
+        <section class="section">
+            <h2 class="section-title">Níveis de Profundidade</h2>
+            <div class="levels">
+                <!-- Nível Iniciante -->
+                <div class="level-card">
+                    <h3 class="level-title">Nível Iniciante</h3>
+                    <ul class="level-features">
+                        <li>Conceitos básicos com analogias do cotidiano</li>
+                        <li>Exercícios curtos (5-10 minutos)</li>
+                        <li>Foco em autopercepção</li>
+                        <li>Introdução à observação fenomenológica</li>
+                        <li>Identificação de construtos pessoais simples</li>
+                    </ul>
+                </div>
+                
+                <!-- Nível Intermediário -->
+                <div class="level-card">
+                    <h3 class="level-title">Nível Intermediário</h3>
+                    <ul class="level-features">
+                        <li>Aprofundamento teórico gradual</li>
+                        <li>Exercícios de desconstrução mais complexos</li>
+                        <li>Análise de construtos sociais</li>
+                        <li>Prática da epoché em situações cotidianas</li>
+                        <li>Desenvolvimento da intencionalidade consciente</li>
+                    </ul>
+                </div>
+                
+                <!-- Nível Avançado -->
+                <div class="level-card">
+                    <h3 class="level-title">Nível Avançado</h3>
+                    <ul class="level-features">
+                        <li>Aplicação em projetos pessoais</li>
+                        <li>Pesquisa fenomenológica guiada</li>
+                        <li>Desenvolvimento de metodologia pessoal</li>
+                        <li>Mentoria e orientação de outros</li>
+                        <li>Criação de novos paradigmas educacionais</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Criar estrelas no fundo
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Posição aleatória
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Atraso de animação aleatório
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Inicializar quando a página carregar
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>

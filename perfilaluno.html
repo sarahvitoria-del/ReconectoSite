@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Reconecto</title>
+    <style>
+        :root {
+            --preto: #0A0A0A;
+            --dourado: #D4AF37;
+            --branco: #F5F5F5;
+            --cinza: #404040;
+            --cinza-claro: #8a8a8a;
+            --bege: #F0E6D2;
+            --verde: #2E8B57;
+            --vermelho: #8B0000;
+            --fundo-card: rgba(64, 64, 64, 0.2);
+            --azul-estudante: rgba(46, 139, 87, 0.1);
+            --borda-estudante: #2E8B57;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cinza);
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: var(--fundo-card);
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 3px solid var(--dourado);
+        }
+        
+        .card.estudante {
+            border-left-color: var(--borda-estudante);
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--dourado);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--preto);
+            margin-bottom: 20px;
+            border: 3px solid var(--borda-estudante);
+        }
+        
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .profile-title {
+            color: var(--borda-estudante);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .profile-level {
+            background: var(--borda-estudante);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dourado);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--cinza-claro);
+        }
+        
+        .profile-bio {
+            text-align: center;
+            color: var(--bege);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--dourado);
+            color: var(--preto);
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #E6C158;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.1rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--cinza-claro);
+        }
+        
+        .info-value {
+            font-weight: 500;
+        }
+        
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .interest {
+            background: rgba(46, 139, 87, 0.1);
+            color: var(--borda-estudante);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .achievement {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--cinza);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .achievement:hover {
+            border-color: var(--dourado);
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .achievement-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            font-size: 0.8rem;
+            color: var(--cinza-claro);
+        }
+        
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid var(--cinza);
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--dourado);
+            color: var(--dourado);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .posts-section {
+            margin-top: 30px;
+        }
+        
+        .post {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--borda-estudante);
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--cinza);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .post-content {
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .post-hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .hashtag {
+            color: var(--dourado);
+            font-size: 0.85rem;
+        }
+        
+        .post-interactions {
+            display: flex;
+            gap: 15px;
+            color: var(--cinza-claro);
+            font-size: 0.9rem;
+        }
+        
+        .interaction {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .progress-section {
+            margin-top: 20px;
+        }
+        
+        .progress-item {
+            margin-bottom: 15px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--cinza);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--borda-estudante);
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Reconecto</div>
+            <div class="nav-buttons">
+                <a href="painel.html" class="nav-btn">Voltar para o Painel</a>
+                <button class="nav-btn">Buscar Profissionais</button>
+                <button class="nav-btn">Configurações</button>
+            </div>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="card profile-header estudante">
+                <div class="profile-avatar">MP</div>
+                <h1 class="profile-name">Maria Pereira</h1>
+                <div class="profile-title">Estudante de Medicina</div>
+                <div class="profile-level">Nível 7 - Estudante Avançado</div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">142</div>
+                        <div class="stat-label">Dias de Estudo</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">87</div>
+                        <div class="stat-label">Posts</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Conquistas</div>
+                    </div>
+                </div>
+                
+                <p class="profile-bio">
+                    Estudante dedicada buscando equilíbrio entre saúde mental e alto desempenho acadêmico. Compartilhando minha jornada e aprendendo com outros estudantes.
+                </p>
+                
+                <div class="action-buttons">
+                    <button class="btn-primary" id="editarPerfil">Editar Perfil</button>
+                    <button class="btn-secondary">Compartilhar Perfil</button>
+                </div>
+            </div>
+            
+            <div class="card estudante">
+                <h2 class="section-title">📚 Interesses de Estudo</h2>
+                <div class="interests">
+                    <div class="interest">Medicina</div>
+                    <div class="interest">Anatomia</div>
+                    <div class="interest">Farmacologia</div>
+                    <div class="interest">Neurociência</div>
+                    <div class="interest">Saúde Mental</div>
+                    <div class="interest">Técnicas de Estudo</div>
+                </div>
+            </div>
+            
+            <div class="card estudante">
+                <h2 class="section-title">🏆 Conquistas Recentes</h2>
+                <div class="achievements-grid">
+                    <div class="achievement">
+                        <div class="achievement-icon">📚</div>
+                        <div class="achievement-title">Maratonista</div>
+                        <div class="achievement-desc">7 dias seguidos estudando</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">💬</div>
+                        <div class="achievement-title">Comunicador</div>
+                        <div class="achievement-desc">50 comentários úteis</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">🎯</div>
+                        <div class="achievement-title">Foco Total</div>
+                        <div class="achievement-desc">100h de estudo focado</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">🤝</div>
+                        <div class="achievement-title">Apoiador</div>
+                        <div class="achievement-desc">25 posts ajudados</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <main>
+            <div class="card estudante">
+                <div class="tab-navigation">
+                    <div class="tab active" data-tab="sobre">Sobre</div>
+                    <div class="tab" data-tab="posts">Meus Posts</div>
+                    <div class="tab" data-tab="progresso">Progresso</div>
+                    <div class="tab" data-tab="conquistas">Conquistas</div>
+                </div>
+                
+                <div class="tab-content active" id="sobre">
+                    <div class="info-section">
+                        <h2 class="section-title">👨‍🎓 Informações Acadêmicas</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Curso</div>
+                                <div class="info-value">Medicina</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Instituição</div>
+                                <div class="info-value">Universidade Federal</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Período</div>
+                                <div class="info-value">4º ano (7º semestre)</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Previsão de Formatura</div>
+                                <div class="info-value">Dezembro/2025</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="section-title">🎯 Metas de Estudo</h2>
+                        <div class="info-item">
+                            <div class="info-value">• Concluir rotação em Psiquiatria com nota acima de 9.0</div>
+                            <div class="info-value">• Aprender técnicas avançadas de anamnese</div>
+                            <div class="info-value">• Desenvolver hábito de estudo consistente (5h/dia)</div>
+                            <div class="info-value">• Participar de 2 congressos médicos este ano</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="section-title">💪 Desafios Pessoais</h2>
+                        <p>
+                            Como estudante de medicina, enfrento o desafio de equilibrar a carga intensa de estudos com 
+                            o cuidado com minha saúde mental. Tenho trabalhado em técnicas para gerenciar a ansiedade 
+                            e manter o foco durante longas jornadas de estudo.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="posts">
+                    <div class="posts-section">
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="post-user">
+                                    <div class="user-avatar">MP</div>
+                                    <div>
+                                        <div class="info-value">Maria Pereira</div>
+                                        <div class="info-label">2 horas atrás</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Descobri uma técnica incrível para memorizar fármacos! Criar acrônimos e histórias com os nomes dos medicamentos tem me ajudado muito. Alguém mais usa técnicas criativas para estudar?
+                            </div>
+                            <div class="post-hashtags">
+                                <span class="hashtag">#farmacologia</span>
+                                <span class="hashtag">#tecnicasestudo</span>
+                                <span class="hashtag">#memorizacao</span>
+                            </div>
+                            <div class="post-interactions">
+                                <div class="interaction">👍 24</div>
+                                <div class="interaction">💬 8</div>
+                                <div class="interaction">🔄 3</div>
+                            </div>
+                        </div>
+                        
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="post-user">
+                                    <div class="user-avatar">MP</div>
+                                    <div>
+                                        <div class="info-value">Maria Pereira</div>
+                                        <div class="info-label">3 dias atrás</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Semana intensa de provas chegando! Estou testando a técnica Pomodoro com intervalos de 25/5 e está sendo ótimo para manter o foco. Como vocês se preparam para semanas pesadas de avaliações?
+                            </div>
+                            <div class="post-hashtags">
+                                <span class="hashtag">#produtividade</span>
+                                <span class="hashtag">#pomodoro</span>
+                                <span class="hashtag">#provas</span>
+                            </div>
+                            <div class="post-interactions">
+                                <div class="interaction">👍 31</div>
+                                <div class="interaction">💬 12</div>
+                                <div class="interaction">🔄 5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="post-user">
+                                    <div class="user-avatar">MP</div>
+                                    <div>
+                                        <div class="info-value">Maria Pereira</div>
+                                        <div class="info-label">1 semana atrás</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                Compartilhando minha vitória da semana: consegui manter a rotina de estudos mesmo com a rotina hospitalar pesada! Pequenas conquistas importam 💪
+                            </div>
+                            <div class="post-hashtags">
+                                <span class="hashtag">#vitoria</span>
+                                <span class="hashtag">#rotina</span>
+                                <span class="hashtag">#medicina</span>
+                            </div>
+                            <div class="post-interactions">
+                                <div class="interaction">👍 45</div>
+                                <div class="interaction">💬 15</div>
+                                <div class="interaction">🔄 7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="progresso">
+                    <div class="info-section">
+                        <h2 class="section-title">📊 Estatísticas de Estudo</h2>
+                        
+                        <div class="progress-section">
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <div class="info-value">Tempo de estudo semanal</div>
+                                    <div class="info-value">32/35h</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 91%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <div class="info-value">Meta de leitura (livros/ano)</div>
+                                    <div class="info-value">8/12</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 67%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <div class="info-value">Participação em discussões</div>
+                                    <div class="info-value">45/50</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <div class="info-value">Exercícios resolvidos</div>
+                                    <div class="info-value">1240/1500</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 83%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="section-title">📈 Desempenho Acadêmico</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Média Geral</div>
+                                <div class="info-value">8.7</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Disciplinas Cursadas</div>
+                                <div class="info-value">42</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Aprovações</div>
+                                <div class="info-value">40</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Menções Máximas</div>
+                                <div class="info-value">28</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="conquistas">
+                    <div class="info-section">
+                        <h2 class="section-title">🏅 Todas as Conquistas</h2>
+                        <div class="achievements-grid">
+                            <div class="achievement">
+                                <div class="achievement-icon">📚</div>
+                                <div class="achievement-title">Iniciante</div>
+                                <div class="achievement-desc">Primeiro post no feed</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">🔥</div>
+                                <div class="achievement-title">Dedicado</div>
+                                <div class="achievement-desc">30 dias de estudo</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">💬</div>
+                                <div class="achievement-title">Comunicador</div>
+                                <div class="achievement-desc">50 comentários úteis</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">🎯</div>
+                                <div class="achievement-title">Foco Total</div>
+                                <div class="achievement-desc">100h de estudo focado</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">🤝</div>
+                                <div class="achievement-title">Apoiador</div>
+                                <div class="achievement-desc">25 posts ajudados</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">📖</div>
+                                <div class="achievement-title">Leitor Ávido</div>
+                                <div class="achievement-desc">10 livros técnicos</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">🏃‍♀️</div>
+                                <div class="achievement-title">Maratonista</div>
+                                <div class="achievement-desc">7 dias seguidos estudando</div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">🌟</div>
+                                <div class="achievement-title">Estrela em Ascensão</div>
+                                <div class="achievement-desc">Nível 5 alcançado</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sistema de abas
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remover classe active de todas as abas e conteúdos
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Adicionar classe active à aba e conteúdo selecionados
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Botão de editar perfil
+            const editarBtn = document.getElementById('editarPerfil');
+            editarBtn.addEventListener('click', function() {
+                alert('Funcionalidade de edição de perfil será implementada em breve!');
+            });
+        });
+    </script>
+</body>
+</html>

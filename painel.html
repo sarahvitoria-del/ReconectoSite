@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Reconecto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --preto: #0A0A0A;
+            --dourado: #D4AF37;
+            --branco: #F5F5F5;
+            --cinza: #404040;
+            --bege: #F0E6D2;
+            --verde: #2E8B57;
+            --vermelho: #8B0000;
+            --cinza-escuro: #1A1A1A;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Layout Principal */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--cinza-escuro);
+            border-right: 2px solid var(--dourado);
+            padding: 30px 20px;
+            position: fixed;
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        /* Logo Animada */
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--cinza);
+        }
+
+        .logo-animada {
+            width: 70px;
+            height: 70px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .logo-animada:hover {
+            transform: scale(1.05);
+        }
+
+        .olho {
+            width: 50px;
+            height: 30px;
+            background: #0A0A0A;
+            border: 2px solid #D4AF37;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            z-index: 2;
+        }
+
+        .pupila {
+            width: 20px;
+            height: 20px;
+            background: #D4AF37;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease-in-out;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+
+        .pupila.fechada {
+            height: 5px;
+            width: 20px;
+            border-radius: 2px;
+            transform: translate(-50%, -50%);
+        }
+
+        .reflexo {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 30%;
+        }
+
+        .circulo-externo {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border: 2px solid transparent;
+            border-top: 2px solid #D4AF37;
+            border-radius: 50%;
+            animation: rotacionar 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .circulo-externo.ativo {
+            opacity: 1;
+        }
+
+        .logo-texto {
+            text-align: center;
+        }
+
+        .logo-texto h1 {
+            color: #D4AF37;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+            letter-spacing: 1px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo-texto p {
+            color: #F0E6D2;
+            font-size: 0.6rem;
+            margin: 2px 0 0 0;
+            opacity: 0.8;
+        }
+
+        @keyframes rotacionar {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes piscar {
+            0%, 100% { transform: translate(-50%, -50%) scaleY(1); }
+            50% { transform: translate(-50%, -50%) scaleY(0.1); }
+        }
+
+        /* Efeito de brilho pulsante */
+        .brilho {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212,175,55,0.4) 0%, rgba(212,175,55,0) 70%);
+            opacity: 0;
+            animation: pulsar 3s ease-in-out infinite;
+        }
+
+        @keyframes pulsar {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        /* Pálpebras para formato de olho mais realista */
+        .palpebra-superior {
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 8px;
+            background: #0A0A0A;
+            border-radius: 50% 50% 0 0;
+            z-index: 3;
+        }
+
+        .palpebra-inferior {
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 8px;
+            background: #0A0A0A;
+            border-radius: 0 0 50% 50%;
+            z-index: 3;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 10px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: var(--branco);
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--dourado);
+        }
+        
+        .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .badge {
+            background: var(--dourado);
+            color: var(--preto);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            margin-left: auto;
+            font-weight: bold;
+        }
+        
+        /* Conteúdo Principal */
+        .main-content {
+            grid-column: 2;
+            padding: 30px;
+            background: var(--preto);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--cinza);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--dourado);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--preto);
+            font-size: 1.2rem;
+        }
+        
+        .user-details h2 {
+            color: var(--dourado);
+            margin-bottom: 5px;
+        }
+        
+        .user-details p {
+            color: var(--bege);
+            font-size: 0.9rem;
+        }
+        
+        /* Cards de Estatísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--cinza-escuro);
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 4px solid var(--dourado);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.1);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dourado);
+            font-size: 1.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dourado);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--bege);
+            font-size: 0.9rem;
+        }
+        
+        /* Seções do Dashboard */
+        .dashboard-section {
+            background: var(--cinza-escuro);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cinza);
+        }
+        
+        .section-title {
+            color: var(--dourado);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        .btn {
+            background: var(--dourado);
+            color: var(--preto);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn:hover {
+            background: #E6C158;
+            transform: translateY(-2px);
+        }
+        
+        .btn i {
+            margin-right: 5px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--dourado);
+            border: 2px solid var(--dourado);
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Fases do Processo */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .phase-card {
+            background: var(--cinza-escuro);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid var(--cinza);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--dourado);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        
+        .phase-card.completed {
+            border-color: var(--verde);
+        }
+        
+        .phase-card.current {
+            border-color: var(--dourado);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .phase-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--dourado);
+            color: var(--preto);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .phase-badge.completed {
+            background: var(--verde);
+            color: var(--branco);
+        }
+        
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dourado);
+            font-size: 1.8rem;
+            margin-right: 15px;
+        }
+        
+        .phase-title {
+            color: var(--dourado);
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        .phase-subtitle {
+            color: var(--bege);
+            font-size: 0.9rem;
+        }
+        
+        .phase-description {
+            color: var(--bege);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .phase-progress {
+            margin-bottom: 20px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 8px;
+        }
+        
+        .progress-label {
+            color: var(--bege);
+            font-size: 0.9rem;
+        }
+        
+        .progress-percent {
+            color: var(--dourado);
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--cinza);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--dourado);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .phase-modules {
+            margin-bottom: 20px;
+        }
+        
+        .module-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .module-item:last-child {
+            border-bottom: none;
+        }
+        
+        .module-check {
+            margin-right: 10px;
+            color: var(--verde);
+        }
+        
+        .module-name {
+            color: var(--bege);
+            font-size: 0.9rem;
+        }
+        
+        .module-lock {
+            margin-right: 10px;
+            color: var(--cinza);
+        }
+        
+        /* Mapa de Significados */
+        .meanings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .meaning-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--cinza);
+            transition: all 0.3s ease;
+        }
+        
+        .meaning-card:hover {
+            border-color: var(--dourado);
+            transform: scale(1.05);
+        }
+        
+        .meaning-icon {
+            font-size: 2rem;
+            color: var(--dourado);
+            margin-bottom: 10px;
+        }
+        
+        .meaning-value {
+            font-size: 1.2rem;
+            color: var(--branco);
+            margin-bottom: 5px;
+        }
+        
+        .meaning-label {
+            color: var(--bege);
+            font-size: 0.8rem;
+        }
+        
+        /* Insights Recentes */
+        .insights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .insight-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid var(--dourado);
+        }
+        
+        .insight-header {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 10px;
+        }
+        
+        .insight-date {
+            color: var(--dourado);
+            font-size: 0.8rem;
+        }
+        
+        .insight-tags {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .insight-tag {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--dourado);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        /* Construtos Identificados */
+        .construtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .construto-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid var(--cinza);
+        }
+        
+        .construto-icon {
+            font-size: 1.5rem;
+            color: var(--dourado);
+            margin-bottom: 10px;
+        }
+        
+        .construto-title {
+            color: var(--branco);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .construto-desc {
+            color: var(--bege);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        /* Exercícios Sugeridos */
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--cinza);
+            transition: all 0.3s ease;
+        }
+        
+        .exercise-card:hover {
+            border-color: var(--dourado);
+            transform: translateY(-3px);
+        }
+        
+        .exercise-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .exercise-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dourado);
+            margin-right: 15px;
+        }
+        
+        .exercise-title {
+            color: var(--dourado);
+            font-size: 1.1rem;
+        }
+        
+        .exercise-desc {
+            color: var(--bege);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .exercise-time {
+            color: var(--cinza);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .exercise-time i {
+            margin-right: 5px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                grid-column: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .meanings-grid,
+            .construtos-grid,
+            .exercises-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-animada" id="logoAnimada">
+                    <div class="brilho"></div>
+                    <div class="circulo-externo" id="circuloExterno"></div>
+                    <div class="olho">
+                        <div class="palpebra-superior"></div>
+                        <div class="palpebra-inferior"></div>
+                        <div class="pupila" id="pupila">
+                            <div class="reflexo"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="logo-texto">
+                    <h1>RECONECTO</h1>
+                    <p>Fenomenologia Aplicada</p>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Visão Geral</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Minha Jornada</span>
+                        <span class="badge">Fase 3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="DiárioFenomenológico.html" class="nav-link">
+                        <i class="fas fa-book"></i>
+                        <span>Diário Fenomenológico</span>
+                        <span class="badge">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapa de Significados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cube"></i>
+                        <span>Construtos Identificados</span>
+                        <span class="badge">7</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progresso Fenomenológico</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="forum.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Comunidade Eidética</span>
+                        <span class="badge">12</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="perfilprof.html" class="nav-link">
+                        <i class="fas fa-hands-helping"></i>
+                        <span>Apoio Psicológico</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--cinza);">
+                <div style="color: var(--bege); font-size: 0.9rem; margin-bottom: 15px;">
+                    <strong>Conceito do Dia:</strong>
+                </div>
+                <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--dourado);">
+                    <div style="color: var(--dourado); font-weight: bold; margin-bottom: 5px;">Epoché</div>
+                    <div style="color: var(--bege); font-size: 0.8rem; line-height: 1.4;">
+                        Suspensão dos julgamentos para observar a experiência em sua pureza fenomenológica.
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="user-info">
+                    <div class="user-avatar">MS</div>
+                    <div class="user-details">
+                        <h2>Maria Silva</h2>
+                        <p>Estudante de Fenomenologia Aplicada - Fase 3</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn">
+                        <i class="fas fa-plus"></i> Novo Insight
+                    </button>
+                </div>
+            </header>
+            
+            <!-- SEÇÃO DAS FASES -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-sitemap"></i>
+                        Minha Jornada Fenomenológica
+                    </h3>
+                    <div class="progress-text">
+                        <span class="progress-label">Progresso Geral:</span>
+                        <span class="progress-percent">65%</span>
+                    </div>
+                </div>
+                
+                <div class="phases-grid">
+                    <!-- Fase 1 -->
+                    <div class="phase-card completed">
+                        <div class="phase-badge completed">Concluída</div>
+                        <div class="phase-header">
+                            <div class="phase-icon">
+                                <i class="fas fa-compass"></i>
+                            </div>
+                            <div>
+                                <h3 class="phase-title">Fase 1</h3>
+                                <p class="phase-subtitle">Fundamentos Individuais</p>
+                            </div>
+                        </div>
+                        <p class="phase-description">
+                            Observação dos próprios processos de estudo e identificação de padrões iniciais através da redução fenomenológica.
+                        </p>
+                        
+                        <div class="phase-progress">
+                            <div class="progress-text">
+                                <span class="progress-label">Progresso:</span>
+                                <span class="progress-percent">100%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="phase-modules">
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Autoconhecimento Inicial</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Introdução à Epoché</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Primeiras Observações</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline" onclick="acessarFase(1)">
+                            <i class="fas fa-redo"></i> Revisitar Fase
+                        </button>
+                    </div>
+                    
+                    <!-- Fase 2 -->
+                    <div class="phase-card completed">
+                        <div class="phase-badge completed">Concluída</div>
+                        <div class="phase-header">
+                            <div class="phase-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div>
+                                <h3 class="phase-title">Fase 2</h3>
+                                <p class="phase-subtitle">Exploração Genealógica</p>
+                            </div>
+                        </div>
+                        <p class="phase-description">
+                            Análise das origens dos construtos sociais sobre educação e desconstrução de significados herdados.
+                        </p>
+                        
+                        <div class="phase-progress">
+                            <div class="progress-text">
+                                <span class="progress-label">Progresso:</span>
+                                <span class="progress-percent">100%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="phase-modules">
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Análise Semiótica</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Desconstrução Genealógica</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Identificação de Construtos</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline" onclick="acessarFase(2)">
+                            <i class="fas fa-redo"></i> Revisitar Fase
+                        </button>
+                    </div>
+                    
+                    <!-- Fase 3 -->
+                    <div class="phase-card current">
+                        <div class="phase-badge">Em Andamento</div>
+                        <div class="phase-header">
+                            <div class="phase-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3 class="phase-title">Fase 3</h3>
+                                <p class="phase-subtitle">Comunidade e Co-criação</p>
+                            </div>
+                        </div>
+                        <p class="phase-description">
+                            Integração com a comunidade para troca de experiências e construção coletiva de novos significados.
+                        </p>
+                        
+                        <div class="phase-progress">
+                            <div class="progress-text">
+                                <span class="progress-label">Progresso:</span>
+                                <span class="progress-percent">65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="phase-modules">
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Participação no Fórum</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-check module-check"></i>
+                                <span class="module-name">Diálogos Semióticos</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-lock module-lock"></i>
+                                <span class="module-name">Projetos Colaborativos</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" onclick="acessarFase(3)">
+                            <i class="fas fa-play"></i> Continuar Fase
+                        </button>
+                    </div>
+                    
+                    <!-- Fase 4 -->
+                    <div class="phase-card">
+                        <div class="phase-badge">Próxima Fase</div>
+                        <div class="phase-header">
+                            <div class="phase-icon">
+                                <i class="fas fa-flag-checkered"></i>
+                            </div>
+                            <div>
+                                <h3 class="phase-title">Fase 4</h3>
+                                <p class="phase-subtitle">Reconexão e Direcionamento</p>
+                            </div>
+                        </div>
+                        <p class="phase-description">
+                            Ressignificação da jornada de estudos e criação de novos significados pessoais a partir da essência descoberta.
+                        </p>
+                        
+                        <div class="phase-progress">
+                            <div class="progress-text">
+                                <span class="progress-label">Progresso:</span>
+                                <span class="progress-percent">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="phase-modules">
+                            <div class="module-item">
+                                <i class="fas fa-lock module-lock"></i>
+                                <span class="module-name">Mapa de Significados</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-lock module-lock"></i>
+                                <span class="module-name">Projeção Fenomenológica</span>
+                            </div>
+                            <div class="module-item">
+                                <i class="fas fa-lock module-lock"></i>
+                                <span class="module-name">Direcionamento Pessoal</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline" onclick="visualizarFase(4)" disabled>
+                            <i class="fas fa-lock"></i> Bloqueada
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Estatísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Insights Registrados</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Construtos Identificados</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">68%</div>
+                    <div class="stat-label">Progresso Fenomenológico</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Dias de Prática</div>
+                </div>
+            </div>
+            
+            <!-- Mapa de Significados -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Mapa de Significados Pessoais
+                    </h3>
+                    <button class="btn">
+                        <i class="fas fa-expand"></i> Visualizar Completo
+                    </button>
+                </div>
+                
+                <div class="meanings-grid">
+                    <div class="meaning-card">
+                        <div class="meaning-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="meaning-value">Aprendizado</div>
+                        <div class="meaning-label">Crescimento contínuo</div>
+                    </div>
+                    
+                    <div class="meaning-card">
+                        <div class="meaning-icon">
+                            <i class="fas fa-peace"></i>
+                        </div>
+                        <div class="meaning-value">Paz</div>
+                        <div class="meaning-label">Estado mental tranquilo</div>
+                    </div>
+                    
+                    <div class="meaning-card">
+                        <div class="meaning-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="meaning-value">Compreensão</div>
+                        <div class="meaning-label">Clareza conceitual</div>
+                    </div>
+                    
+                    <div class="meaning-card">
+                        <div class="meaning-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="meaning-value">Propósito</div>
+                        <div class="meaning-label">Direcionamento claro</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Insights e Progresso -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- Insights Recentes -->
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-feather-alt"></i>
+                            Insights Recentes
+                        </h3>
+                        <button class="btn">
+                            <i class="fas fa-history"></i> Ver Todos
+                        </button>
+                    </div>
+                    
+                    <div class="insights-list">
+                        <div class="insight-item">
+                            <div class="insight-header">
+                                <div class="insight-date">Hoje - 14:30</div>
+                                <div class="insight-tags">
+                                    <span class="insight-tag">#epoché</span>
+                                    <span class="insight-tag">#matemática</span>
+                                </div>
+                            </div>
+                            <p>Percebi que meu medo de equações vem do construto social de que "matemática é difícil", não da matemática em si.</p>
+                        </div>
+                        
+                        <div class="insight-item">
+                            <div class="insight-header">
+                                <div class="insight-date">Ontem - 09:15</div>
+                                <div class="insight-tags">
+                                    <span class="insight-tag">#eidos</span>
+                                    <span class="insight-tag">#história</span>
+                                </div>
+                            </div>
+                            <p>A essência do estudo histórico para mim é compreender padrões humanos, não apenas memorizar datas.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Progresso Fenomenológico -->
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            Progresso
+                        </h3>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <div class="progress-title">Observação Fenomenológica</div>
+                            <div class="progress-percent">85%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <div class="progress-title">Análise Semiótica</div>
+                            <div class="progress-percent">72%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 72%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <div class="progress-title">Desconstrução de Construtos</div>
+                            <div class="progress-percent">68%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 68%"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Classe para controlar a logo animada
+        class LogoAnimada {
+            constructor() {
+                this.logo = document.getElementById('logoAnimada');
+                this.pupila = document.getElementById('pupila');
+                this.circuloExterno = document.getElementById('circuloExterno');
+                this.estaAberto = true;
+                this.animacaoAtiva = false;
+
+                this.iniciarAnimacaoAutomatica();
+                this.adicionarEventos();
+            }
+
+            iniciarAnimacaoAutomatica() {
+                // Inicia a animação automaticamente após 1 segundo
+                setTimeout(() => {
+                    this.abrirOlho();
+                }, 1000);
+
+                // Piscadas aleatórias
+                setInterval(() => {
+                    if (this.estaAberto && !this.animacaoAtiva) {
+                        this.piscar();
+                    }
+                }, 5000);
+            }
+
+            adicionarEventos() {
+                this.logo.addEventListener('click', () => {
+                    if (this.estaAberto) {
+                        this.fecharOlho();
+                    } else {
+                        this.abrirOlho();
+                    }
+                });
+            }
+
+            piscar() {
+                this.pupila.style.animation = 'piscar 0.3s ease';
+                setTimeout(() => {
+                    this.pupila.style.animation = '';
+                }, 300);
+            }
+
+            abrirOlho() {
+                this.animacaoAtiva = true;
+                this.estaAberto = true;
+                
+                // Abre o olho
+                this.pupila.classList.remove('fechada');
+                
+                // Inicia a rotação do círculo
+                setTimeout(() => {
+                    this.circuloExterno.classList.add('ativo');
+                    this.animacaoAtiva = false;
+                }, 300);
+            }
+
+            fecharOlho() {
+                this.animacaoAtiva = true;
+                this.estaAberto = false;
+                
+                // Para a rotação
+                setTimeout(() => {
+                    this.circuloExterno.classList.remove('ativo');
+                    
+                    // Fecha o olho
+                    setTimeout(() => {
+                        this.pupila.classList.add('fechada');
+                        this.animacaoAtiva = false;
+                    }, 300);
+                }, 300);
+            }
+        }
+
+        // Funções para acesso às fases
+        function acessarFase(numeroFase) {
+            const fases = {
+                1: "fase1.html",
+                2: "fase2.html", 
+                3: "fase3.html",
+                4: "fase4.html"
+            };
+            
+            // Redireciona para a página da fase específica
+            window.location.href = fases[numeroFase];
+        }
+        
+        function visualizarFase(numeroFase) {
+            alert(`A Fase ${numeroFase} será liberada após a conclusão da fase anterior.`);
+        }
+        
+        // Simulação de dados do usuário
+        const userData = {
+            name: "Maria Silva",
+            currentPhase: 3,
+            phaseProgress: 65,
+            insights: 24,
+            construtos: 7,
+            practiceDays: 15
+        };
+        
+        // Atualizar dados na interface
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard carregado com sucesso!');
+            
+            // Inicializar a logo animada
+            new LogoAnimada();
+            
+            // Destacar fase atual
+            const currentPhaseCard = document.querySelector('.phase-card.current');
+            if (currentPhaseCard) {
+                currentPhaseCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Navegação entre seções - APENAS para links sem href definido
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Se o link não tem href ou href é "#", previne o comportamento padrão
+                    if (!this.getAttribute('href') || this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                        
+                        // Remover classe active de todos os links
+                        document.querySelectorAll('.nav-link').forEach(l => {
+                            l.classList.remove('active');
+                        });
+                        
+                        // Adicionar classe active ao link clicado
+                        this.classList.add('active');
+                        
+                        // Aqui você implementaria a navegação real entre páginas
+                        const sectionName = this.querySelector('span').textContent;
+                        console.log(`Navegando para: ${sectionName}`);
+                    }
+                    // Se o link tem um href válido (como "DiárioFenomenológico.html"), 
+                    // deixa o navegador seguir o link normalmente
+                });
+            });
+        });
+    </script>
+</body>
+</html>

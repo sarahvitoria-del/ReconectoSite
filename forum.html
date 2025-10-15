@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórum Comunitário "Eidética Coletiva"</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Estrelas no fundo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #D4AF37;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ddd;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout principal */
+        .forum-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1100px) {
+            .forum-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Navegação lateral */
+        .sidebar {
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            border-left: 4px solid #D4AF37;
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            color: #D4AF37;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: #ddd;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(212, 175, 55, 0.2);
+            color: #D4AF37;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .badge {
+            background-color: #D4AF37;
+            color: #000;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        /* Conteúdo principal */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Seções */
+        .section {
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            border-left: 4px solid #D4AF37;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #D4AF37;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #D4AF37, #FFD700);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Cards de área temática */
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .area-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .area-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .area-icon {
+            font-size: 2rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+        .area-title {
+            font-size: 1.2rem;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .area-description {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .area-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Threads */
+        .threads-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .thread-card {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 3px solid #D4AF37;
+            transition: all 0.3s ease;
+        }
+
+        .thread-card:hover {
+            background-color: rgba(40, 40, 40, 0.9);
+        }
+
+        .thread-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .thread-title {
+            font-size: 1.1rem;
+            color: #FFD700;
+            text-decoration: none;
+        }
+
+        .thread-title:hover {
+            text-decoration: underline;
+        }
+
+        .thread-badge {
+            background-color: #D4AF37;
+            color: #000;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .thread-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .thread-preview {
+            font-size: 0.95rem;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+
+        .thread-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .thread-tag {
+            background-color: rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            color: #D4AF37;
+        }
+
+        /* Ferramentas */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+        .tool-title {
+            font-size: 1.2rem;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .tool-description {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Desafios */
+        .challenge-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #D4AF37, #FFD700, #D4AF37);
+        }
+
+        .challenge-title {
+            font-size: 1.4rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .challenge-description {
+            font-size: 1rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .challenge-steps {
+            list-style-type: none;
+            margin-bottom: 20px;
+        }
+
+        .challenge-steps li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .challenge-steps li::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+
+        /* Selos */
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .badge-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            color: #D4AF37;
+            margin-bottom: 10px;
+        }
+
+        .badge-name {
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .badge-description {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .areas-grid, .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo com estrelas -->
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <!-- Cabeçalho -->
+        <header>
+            <h1>Fórum Comunitário "Eidética Coletiva"</h1>
+            <p class="subtitle">Espaço para desconstrução colaborativa, análise fenomenológica e construção de novos significados</p>
+        </header>
+        
+        <div class="forum-layout">
+            <!-- Navegação lateral -->
+            <aside class="sidebar">
+                <h2 class="sidebar-title">Navegação</h2>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <i class="fas fa-home"></i> Início
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-flask"></i> Laboratório Fenomenológico
+                            <span class="badge">12</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-search"></i> Arqueologia dos Saberes
+                            <span class="badge">8</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-comments"></i> Diálogos Semióticos
+                            <span class="badge">15</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-drafting-compass"></i> Eidos em Construção
+                            <span class="badge">6</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-trophy"></i> Desafios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-users"></i> Grupos de Estudo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-map"></i> Mapa de Conexões
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-book"></i> Diário Coletivo
+                        </a>
+                    </li>
+                </ul>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #D4AF37; margin-bottom: 15px; font-size: 1.2rem;">Tags Populares</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span style="background-color: rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 5px 10px; font-size: 0.8rem; color: #D4AF37;">#epoché</span>
+                        <span style="background-color: rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 5px 10px; font-size: 0.8rem; color: #D4AF37;">#signo</span>
+                        <span style="background-color: rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 5px 10px; font-size: 0.8rem; color: #D4AF37;">#eidos</span>
+                        <span style="background-color: rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 5px 10px; font-size: 0.8rem; color: #D4AF37;">#construto</span>
+                        <span style="background-color: rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 5px 10px; font-size: 0.8rem; color: #D4AF37;">#ressignificação</span>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Conteúdo principal -->
+            <main class="main-content">
+                <!-- Áreas Temáticas -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-th-large"></i> Áreas Temáticas Principais</h2>
+                        <button class="btn"><i class="fas fa-plus"></i> Nova Thread</button>
+                    </div>
+                    
+                    <div class="areas-grid">
+                        <div class="area-card">
+                            <div class="area-icon">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <h3 class="area-title">Laboratório Fenomenológico</h3>
+                            <p class="area-description">Threads de exercícios em grupo, compartilhamento de reduções fenomenológicas e análises coletivas.</p>
+                            <div class="area-stats">
+                                <span>42 threads</span>
+                                <span>287 respostas</span>
+                            </div>
+                        </div>
+                        
+                        <div class="area-card">
+                            <div class="area-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="area-title">Arqueologia dos Saberes</h3>
+                            <p class="area-description">Discussões sobre origens das disciplinas e desconstrução colaborativa de conceitos.</p>
+                            <div class="area-stats">
+                                <span>28 threads</span>
+                                <span>154 respostas</span>
+                            </div>
+                        </div>
+                        
+                        <div class="area-card">
+                            <div class="area-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3 class="area-title">Diálogos Semióticos</h3>
+                            <p class="area-description">Análise de signos educacionais, decodificação de linguagem acadêmica e estudo de metáforas.</p>
+                            <div class="area-stats">
+                                <span>35 threads</span>
+                                <span>203 respostas</span>
+                            </div>
+                        </div>
+                        
+                        <div class="area-card">
+                            <div class="area-icon">
+                                <i class="fas fa-drafting-compass"></i>
+                            </div>
+                            <h3 class="area-title">Eidos em Construção</h3>
+                            <p class="area-description">Compartilhamento de essências descobertas e reflexões sobre direcionamentos pessoais.</p>
+                            <div class="area-stats">
+                                <span>19 threads</span>
+                                <span>112 respostas</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Threads em Destaque -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-fire"></i> Threads em Destaque</h2>
+                        <button class="btn"><i class="fas fa-filter"></i> Filtrar</button>
+                    </div>
+                    
+                    <div class="threads-list">
+                        <div class="thread-card">
+                            <div class="thread-header">
+                                <a href="#" class="thread-title">
+                                    [ANÁLISE] O signo "nota perfeita"
+                                    <span class="thread-badge">POPULAR</span>
+                                </a>
+                                <div style="font-size: 0.9rem; color: #999;">por <span style="color: #D4AF37;">Maria_Silva</span></div>
+                            </div>
+                            <div class="thread-meta">
+                                <span><i class="far fa-eye"></i> 342 visualizações</span>
+                                <span><i class="far fa-comment"></i> 47 respostas</span>
+                                <span><i class="far fa-clock"></i> 2 dias atrás</span>
+                            </div>
+                            <p class="thread-preview">O que este signo representa para você? Quais significados sociais carrega? Como podemos ressignificá-lo?</p>
+                            <div class="thread-tags">
+                                <span class="thread-tag">#signo</span>
+                                <span class="thread-tag">#construto</span>
+                                <span class="thread-tag">#ressignificação</span>
+                            </div>
+                        </div>
+                        
+                        <div class="thread-card">
+                            <div class="thread-header">
+                                <a href="#" class="thread-title">
+                                    [EPOCHÉ] Estudando História sem pré-conceitos
+                                    <span class="thread-badge">NOVO</span>
+                                </a>
+                                <div style="font-size: 0.9rem; color: #999;">por <span style="color: #D4AF37;">João_Phenomeno</span></div>
+                            </div>
+                            <div class="thread-meta">
+                                <span><i class="far fa-eye"></i> 128 visualizações</span>
+                                <span><i class="far fa-comment"></i> 23 respostas</span>
+                                <span><i class="far fa-clock"></i> 5 horas atrás</span>
+                            </div>
+                            <p class="thread-preview">Relato da suspensão de julgamentos, descobertas durante a observação pura e insights sobre a essência do histórico.</p>
+                            <div class="thread-tags">
+                                <span class="thread-tag">#epoché</span>
+                                <span class="thread-tag">#história</span>
+                            </div>
+                        </div>
+                        
+                        <div class="thread-card">
+                            <div class="thread-header">
+                                <a href="#" class="thread-title">
+                                    [GENEALOGIA] A física newtoniana
+                                </a>
+                                <div style="font-size: 0.9rem; color: #999;">por <span style="color: #D4AF37;">Carlos_Cientista</span></div>
+                            </div>
+                            <div class="thread-meta">
+                                <span><i class="far fa-eye"></i> 215 visualizações</span>
+                                <span><i class="far fa-comment"></i> 31 respostas</span>
+                                <span><i class="far fa-clock"></i> 3 dias atrás</span>
+                            </div>
+                            <p class="thread-preview">Contexto histórico do surgimento, como era vista inicialmente e quais construtos modernos podemos identificar.</p>
+                            <div class="thread-tags">
+                                <span class="thread-tag">#genealogia</span>
+                                <span class="thread-tag">#física</span>
+                                <span class="thread-tag">#construto</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Ferramentas de Interação -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-tools"></i> Ferramentas de Interação</h2>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <h3 class="tool-title">Marcador Fenomenológico</h3>
+                            <p class="tool-description">Sistema de tags para categorizar insights: #epoché, #signo, #eidos, #construto, #ressignificação</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h3 class="tool-title">Mapa de Conexões</h3>
+                            <p class="tool-description">Visualização de como threads se relacionam e mostram padrões nas descobertas da comunidade.</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <h3 class="tool-title">Diário Coletivo</h3>
+                            <p class="tool-description">Timeline compartilhada de insights comunitários e momentos "aha!" da comunidade.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Desafio da Semana -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-trophy"></i> Desafio da Semana</h2>
+                    
+                    <div class="challenge-card">
+                        <h3 class="challenge-title">"Desafio da Semana: A Epoché da Química"</h3>
+                        <p class="challenge-description">Participe deste exercício coletivo de suspensão de julgamentos sobre conceitos químicos fundamentais.</p>
+                        
+                        <ul class="challenge-steps">
+                            <li>Escolher um conceito químico (ex: "átomo", "molécula", "reação")</li>
+                            <li>Aplicar redução fenomenológica ao conceito escolhido</li>
+                            <li>Compartilhar descobertas no fórum usando a tag #desafioquimica</li>
+                        </ul>
+                        
+                        <button class="btn"><i class="fas fa-rocket"></i> Participar do Desafio</button>
+                    </div>
+                </section>
+                
+                <!-- Selos de Qualidade -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-award"></i> Selos de Qualidade</h2>
+                    
+                    <div class="badges-container">
+                        <div class="badge-card">
+                            <div class="badge-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3 class="badge-name">Epoché Bem Aplicada</h3>
+                            <p class="badge-description">Para análises com suspensão exemplar de julgamentos</p>
+                        </div>
+                        
+                        <div class="badge-card">
+                            <div class="badge-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h3 class="badge-name">Análise Semiótica Profunda</h3>
+                            <p class="badge-description">Para decodificação excepcional de signos</p>
+                        </div>
+                        
+                        <div class="badge-card">
+                            <div class="badge-icon">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <h3 class="badge-name">Insight Eidético</h3>
+                            <p class="badge-description">Para descobertas de essências fundamentais</p>
+                        </div>
+                        
+                        <div class="badge-card">
+                            <div class="badge-icon">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <h3 class="badge-name">Desconstrução Genealógica</h3>
+                            <p class="badge-description">Para análises históricas de conceitos</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Criar estrelas no fundo
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Posição aleatória
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Atraso de animação aleatório
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Simulação de interação com cards
+        document.querySelectorAll('.area-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const areaTitle = this.querySelector('.area-title').textContent;
+                alert(`Navegando para: ${areaTitle}`);
+            });
+        });
+        
+        // Inicializar quando a página carregar
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>

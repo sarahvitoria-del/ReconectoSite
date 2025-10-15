@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário Fenomenológico Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Estrelas no fundo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #D4AF37;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ddd;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout de duas colunas */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Seções */
+        .section {
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            border-left: 4px solid #D4AF37;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #D4AF37;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+        }
+
+        /* Formulário de registro */
+        .insight-form textarea {
+            width: 100%;
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 15px;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .tag.selected {
+            background-color: #D4AF37;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #D4AF37, #FFD700);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Lista de insights */
+        .insights-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .insight-item {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #D4AF37;
+        }
+
+        .insight-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .insight-date {
+            font-size: 0.85rem;
+            color: #D4AF37;
+        }
+
+        .insight-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .insight-tag {
+            background-color: rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Linha do tempo */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #D4AF37;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #D4AF37;
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #D4AF37;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Estatísticas */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #ddd;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo com estrelas -->
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <!-- Cabeçalho -->
+        <header>
+            <h1>Diário Fenomenológico Digital</h1>
+            <p class="subtitle">Registro em tempo real de insights, tags para emoções, matérias e construtos identificados, com linha do tempo do desenvolvimento da consciência crítica.</p>
+        </header>
+        
+        <!-- Conteúdo principal -->
+        <div class="main-content">
+            <!-- Coluna 1: Registro de insights -->
+            <div class="section">
+                <h2 class="section-title"><i class="fas fa-pen"></i> Registro de Insights</h2>
+                <div class="insight-form">
+                    <textarea placeholder="Descreva seu insight, reflexão ou observação fenomenológica..."></textarea>
+                    
+                    <h3 style="color: #D4AF37; margin-bottom: 10px;">Tags:</h3>
+                    <div class="tags-container">
+                        <div class="tag" data-category="emotion">😊 Alegria</div>
+                        <div class="tag" data-category="emotion">😔 Tristeza</div>
+                        <div class="tag" data-category="emotion">😠 Raiva</div>
+                        <div class="tag" data-category="emotion">😨 Medo</div>
+                        <div class="tag" data-category="emotion">😌 Paz</div>
+                        <div class="tag" data-category="subject">📚 Filosofia</div>
+                        <div class="tag" data-category="subject">🔬 Ciência</div>
+                        <div class="tag" data-category="subject">📖 Literatura</div>
+                        <div class="tag" data-category="subject">🎨 Arte</div>
+                        <div class="tag" data-category="construct">#Epoché</div>
+                        <div class="tag" data-category="construct">#Eidos</div>
+                        <div class="tag" data-category="construct">#Construto</div>
+                    </div>
+                    
+                    <button class="btn"><i class="fas fa-save"></i> Registrar Insight</button>
+                </div>
+            </div>
+            
+            <!-- Coluna 2: Insights recentes -->
+            <div class="section">
+                <h2 class="section-title"><i class="fas fa-list"></i> Insights Recentes</h2>
+                <div class="insights-list">
+                    <div class="insight-item">
+                        <div class="insight-header">
+                            <div class="insight-date">15/10/2023 - 14:30</div>
+                        </div>
+                        <p>Hoje percebi como o construto social da "produtividade" tem influenciado minha forma de estudar, criando ansiedade desnecessária.</p>
+                        <div class="insight-tags">
+                            <span class="insight-tag">😨 Medo</span>
+                            <span class="insight-tag">📚 Filosofia</span>
+                            <span class="insight-tag">#Construto</span>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-header">
+                            <div class="insight-date">14/10/2023 - 09:15</div>
+                        </div>
+                        <p>A prática da epoché me permitiu observar meus julgamentos sobre o texto filosófico sem me deixar levar por eles inicialmente.</p>
+                        <div class="insight-tags">
+                            <span class="insight-tag">😌 Paz</span>
+                            <span class="insight-tag">📚 Filosofia</span>
+                            <span class="insight-tag">#Epoché</span>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-header">
+                            <div class="insight-date">12/10/2023 - 16:45</div>
+                        </div>
+                        <p>Ao estudar o conceito de Eidos, compreendi melhor a essência por trás das aparências dos objetos de estudo.</p>
+                        <div class="insight-tags">
+                            <span class="insight-tag">😊 Alegria</span>
+                            <span class="insight-tag">📚 Filosofia</span>
+                            <span class="insight-tag">#Eidos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Linha do tempo -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Linha do Tempo do Desenvolvimento da Consciência Crítica</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Outubro 2023</div>
+                    <div class="timeline-content">
+                        <h3 style="color: #D4AF37; margin-bottom: 10px;">Fase de Questionamento Inicial</h3>
+                        <p>Início do questionamento sobre construtos sociais relacionados à educação. Primeiros exercícios de epoché aplicados ao estudo.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Setembro 2023</div>
+                    <div class="timeline-content">
+                        <h3 style="color: #D4AF37; margin-bottom: 10px;">Fase de Observação Fenomenológica</h3>
+                        <p>Desenvolvimento da capacidade de observar experiências educacionais sem julgamentos prévios. Identificação de padrões emocionais recorrentes.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Agosto 2023</div>
+                    <div class="timeline-content">
+                        <h3 style="color: #D4AF37; margin-bottom: 10px;">Fase de Familiarização</h3>
+                        <p>Primeiros contatos com os conceitos de fenomenologia. Experimentação inicial com o diário de insights.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estatísticas -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">47</div>
+                <div class="stat-label">Insights Registrados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Construtos Identificados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Matérias Exploradas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">28</div>
+                <div class="stat-label">Dias de Prática</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Criar estrelas no fundo
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Posição aleatória
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Atraso de animação aleatório
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Seleção de tags
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // Simulação de registro de insight
+        document.querySelector('.btn').addEventListener('click', function() {
+            const textarea = document.querySelector('.insight-form textarea');
+            const selectedTags = document.querySelectorAll('.tag.selected');
+            
+            if (textarea.value.trim() === '') {
+                alert('Por favor, descreva seu insight antes de registrar.');
+                return;
+            }
+            
+            // Aqui normalmente enviaríamos os dados para um servidor
+            // Por enquanto, apenas simulamos o comportamento
+            alert('Insight registrado com sucesso!');
+            textarea.value = '';
+            
+            // Limpar seleção de tags
+            selectedTags.forEach(tag => {
+                tag.classList.remove('selected');
+            });
+        });
+        
+        // Inicializar quando a página carregar
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>

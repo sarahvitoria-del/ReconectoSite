@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudos com Propósito - Questionário Fenomenológico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --preto: #0A0A0A;
+            --dourado: #D4AF37;
+            --branco: #F5F5F5;
+            --cinza: #404040;
+            --bege: #F0E6D2;
+            --verde: #2E8B57;
+            --vermelho: #8B0000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid var(--dourado);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Estilos da Tela de Seleção */
+        .tela-selecao {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            color: var(--dourado);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitulo {
+            color: var(--bege);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .descricao-plataforma {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            color: var(--bege);
+            line-height: 1.6;
+        }
+        
+        .opcoes-perfil {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .opcao-perfil {
+            background: rgba(30, 30, 30, 0.8);
+            border: 2px solid var(--cinza);
+            border-radius: 15px;
+            padding: 30px;
+            width: 280px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .opcao-perfil:hover {
+            transform: translateY(-5px);
+            border-color: var(--dourado);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        
+        .icone-perfil {
+            font-size: 3rem;
+            color: var(--dourado);
+            margin-bottom: 20px;
+        }
+        
+        .titulo-perfil {
+            font-size: 1.4rem;
+            color: var(--dourado);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .descricao-perfil {
+            color: var(--bege);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .destaque {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid var(--dourado);
+        }
+        
+        .info-psicologo {
+            background: rgba(46, 139, 87, 0.1);
+            border: 1px solid var(--verde);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: left;
+        }
+        
+        .info-psicologo h3 {
+            color: var(--verde);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-psicologo h3 i {
+            margin-right: 10px;
+        }
+        
+        .info-psicologo ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .info-psicologo li {
+            margin-bottom: 8px;
+            color: var(--bege);
+        }
+        
+        /* Estilos do Questionário do Estudante */
+        .questionario-estudante {
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--cinza);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dourado), #E6C158);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .bloco {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .bloco.ativo {
+            display: block;
+        }
+        
+        .conceito-chave {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid var(--dourado);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .conceito-titulo {
+            color: var(--dourado);
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .conceito-titulo i {
+            margin-right: 8px;
+        }
+        
+        .conceito-descricao {
+            font-size: 0.9rem;
+            color: var(--bege);
+        }
+        
+        .pergunta {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid var(--cinza);
+            transition: all 0.3s ease;
+        }
+        
+        .pergunta:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+        
+        .pergunta h3 {
+            color: var(--dourado);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pergunta h3 i {
+            margin-right: 10px;
+            opacity: 0.8;
+        }
+        
+        .opcoes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .opcao {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .opcao:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--cinza);
+        }
+        
+        .opcao.selecionada {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--dourado);
+        }
+        
+        .opcao input {
+            margin-right: 10px;
+        }
+        
+        .campo-texto {
+            width: 100%;
+            padding: 12px;
+            background: var(--preto);
+            border: 1px solid var(--cinza);
+            border-radius: 4px;
+            color: var(--branco);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .campo-texto:focus {
+            outline: none;
+            border-color: var(--dourado);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+        
+        .botoes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-voltar {
+            background: transparent;
+            color: var(--branco);
+            border: 1px solid var(--cinza);
+        }
+        
+        .btn-voltar:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-avancar {
+            background: var(--dourado);
+            color: var(--preto);
+        }
+        
+        .btn-avancar:hover {
+            background: #E6C158;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .btn-enviar {
+            background: var(--verde);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-enviar:hover {
+            background: #3CB371;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+        
+        .escala {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        
+        .ponto-escala {
+            text-align: center;
+            flex: 1;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .ponto-escala:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .ponto-escala.selecionada {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--dourado);
+        }
+        
+        .numero {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .descricao {
+            font-size: 0.8rem;
+            color: var(--bege);
+        }
+        
+        .aviso {
+            background: rgba(139, 0, 0, 0.2);
+            border: 1px solid var(--vermelho);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: #FF6B6B;
+            display: flex;
+            align-items: center;
+        }
+        
+        .aviso i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .emoji-opcao {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos do Formulário de Psicólogo */
+        .formulario-psicologo {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .info-importante {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--dourado);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: var(--bege);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-container input {
+            margin-right: 10px;
+        }
+        
+        .escala-valores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .valor-sessao {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .valor-sessao:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--cinza);
+        }
+        
+        .valor-sessao.selecionado {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--dourado);
+        }
+        
+        .valor-sessao input {
+            display: none;
+        }
+        
+        .campo-personalizado {
+            margin-top: 10px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .botoes {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .escala {
+                flex-wrap: wrap;
+            }
+            
+            .ponto-escala {
+                flex: 0 0 18%;
+                margin-bottom: 10px;
+            }
+            
+            .valor-sessao {
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- TELA DE SELEÇÃO DE PERFIL -->
+        <div class="tela-selecao" id="telaSelecao">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            
+            <h1>Estudos com Propósito</h1>
+            <p class="subtitulo">Uma abordagem fenomenológica e semiótica da aprendizagem</p>
+            
+            <div class="descricao-plataforma">
+                <p>Nossa plataforma integra conceitos da <strong>Fenomenologia</strong> e <strong>Semótica</strong> para ajudar você a:</p>
+                <ul style="text-align: left; margin: 15px 0; color: var(--bege);">
+                    <li>Observar seu processo de estudo sem julgamentos (Epoché)</li>
+                    <li>Analisar os significados que atribui ao aprendizado</li>
+                    <li>Desconstruir conceitos sociais sobre educação</li>
+                    <li>Encontrar sua essência (Eidos) no processo de aprendizagem</li>
+                </ul>
+            </div>
+
+            <!-- Informações para Psicólogos -->
+            <div class="info-psicologo">
+                <h3><i class="fas fa-hands-helping"></i> Para Psicólogos na Plataforma:</h3>
+                <ul>
+                    <li><strong>Acesso aos fóruns da comunidade</strong> - Participe de discussões fenomenológicas</li>
+                    <li><strong>Atendimento gratuito nos chats</strong> - Bate-papo e direcionamento rápidos</li>
+                    <li><strong>Remuneração por sessões particulares</strong> - Quando o usuário quiser atendimentos mais longos ou respostas mais rápidas</li>
+                    <li><strong>Sistema de incentivo por avaliações</strong> - Quanto melhores suas avaliações, maior a remuneração (até R$ 300)</li>
+                    <li><strong>Selo de verificação</strong> - Destaque seu perfil com nossa certificação</li>
+                </ul>
+                <p style="color: var(--bege); font-style: italic; margin: 0;">
+                    <strong>Objetivo central:</strong> Oferecer apoio psicológico acessível aos estudantes, com remuneração como incentivo adicional.
+                </p>
+            </div>
+
+            <div class="opcoes-perfil">
+                <!-- Opção Estudante -->
+                <div class="opcao-perfil" onclick="selecionarPerfil('estudante')">
+                    <div class="icone-perfil">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="titulo-perfil">Sou Estudante</div>
+                    <div class="descricao-perfil">
+                        Quero explorar minha relação com os estudos através da abordagem fenomenológica e semiótica.
+                    </div>
+                    <div class="destaque">
+                        <small>Questionário personalizado + Acesso à comunidade</small>
+                    </div>
+                </div>
+                
+                <!-- Opção Psicólogo -->
+                <div class="opcao-perfil" onclick="selecionarPerfil('psicologo')">
+                    <div class="icone-perfil">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="titulo-perfil">Sou Psicólogo</div>
+                    <div class="descricao-perfil">
+                        Quero me cadastrar para oferecer suporte aos estudantes na plataforma.
+                    </div>
+                    <div class="destaque">
+                        <small>Cadastro profissional + Acesso à comunidade</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUESTIONÁRIO DO ESTUDANTE -->
+        <div class="questionario-estudante" id="questionarioEstudante">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <h1>Questionário Fenomenológico</h1>
+            <p class="subtitulo">Uma jornada de autoconhecimento sobre seus estudos e percepções</p>
+            
+            <form id="questionario">
+                <!-- Bloco 1: Identificação e Objetivos -->
+                <div class="bloco ativo" id="bloco1">
+                    <div class="conceito-chave">
+                        <div class="conceito-titulo"><i class="fas fa-compass"></i> Redução Fenomenológica (Epoché)</div>
+                        <div class="conceito-descricao">
+                            Vamos suspender nossos julgamentos prévios sobre estudos e aprendizagem para observar suas experiências como elas realmente são.
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-user"></i> 1. Qual é o seu nome?</h3>
+                        <input type="text" class="campo-texto" id="nome" placeholder="Digite seu nome completo" required>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-bullseye"></i> 2. Qual é sua relação atual com os estudos?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="relacao" value="vestibular" required> 
+                                <span class="emoji-opcao">🎯</span> Preparação para vestibular
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="relacao" value="faculdade"> 
+                                <span class="emoji-opcao">🎓</span> Estudante universitário
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="relacao" value="concurso"> 
+                                <span class="emoji-opcao">📋</span> Preparação para concurso
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="relacao" value="escolar"> 
+                                <span class="emoji-opcao">📚</span> Estudante do ensino médio/fundamental
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="relacao" value="autodidata"> 
+                                <span class="emoji-opcao">🔍</span> Aprendizagem autodidata
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-hourglass-half"></i> 3. Quando você pretende alcançar seu objetivo principal?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="prazo" value="este-ano" required> 
+                                <span class="emoji-opcao">⚡</span> Este ano
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="prazo" value="proximo-ano"> 
+                                <span class="emoji-opcao">📅</span> No próximo ano
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="prazo" value="dois-anos"> 
+                                <span class="emoji-opcao">🗓️</span> Em 2 anos ou mais
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="prazo" value="sem-prazo"> 
+                                <span class="emoji-opcao">∞</span> Sem prazo definido
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="botoes">
+                        <div></div>
+                        <button type="button" class="btn btn-avancar" onclick="avancarBloco(1)">Avançar <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Bloco 2: Perfil de Estudo e Conhecimento -->
+                <div class="bloco" id="bloco2">
+                    <div class="conceito-chave">
+                        <div class="conceito-titulo"><i class="fas fa-search"></i> Análise Semiótica</div>
+                        <div class="conceito-descricao">
+                            Vamos observar os "signos" (símbolos e significados) que você atribui às diferentes áreas do conhecimento.
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-graduation-cap"></i> 4. Em que etapa de estudos você se encontra?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="etapa" value="1ano" required> 
+                                <span class="emoji-opcao">1️⃣</span> Ensino Médio (1º ano)
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="etapa" value="2ano"> 
+                                <span class="emoji-opcao">2️⃣</span> Ensino Médio (2º ano)
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="etapa" value="3ano"> 
+                                <span class="emoji-opcao">3️⃣</span> Ensino Médio (3º ano)
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="etapa" value="cursinho"> 
+                                <span class="emoji-opcao">📖</span> Cursinho Pré-Vestibular
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="etapa" value="concluido"> 
+                                <span class="emoji-opcao">🎓</span> Já concluí o Ensino Médio
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-brain"></i> 5. Como você percebe seu relacionamento com estas áreas do conhecimento?</h3>
+                        <p style="color: var(--bege); margin-bottom: 15px; font-size: 0.9rem;">
+                            Pense não apenas no seu desempenho, mas nos sentimentos e significados que cada área tem para você.
+                        </p>
+                        
+                        <div id="escalas-materias">
+                            <!-- As escalas serão geradas dinamicamente pelo JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-clock"></i> 6. Como é sua rotina de estudos atualmente?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="rotina" value="desorganizada" required> 
+                                <span class="emoji-opcao">🔄</span> Pouco organizada, estudo quando dá
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="rotina" value="parcial"> 
+                                <span class="emoji-opcao">📅</span> Tenho alguns horários fixos na semana
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="rotina" value="organizada"> 
+                                <span class="emoji-opcao">✅</span> Tenho uma rotina bem estabelecida
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="rotina" value="intensa"> 
+                                <span class="emoji-opcao">🔥</span> Estudo intensivamente, quase todos os dias
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="botoes">
+                        <button type="button" class="btn btn-voltar" onclick="voltarBloco(2)"><i class="fas fa-arrow-left"></i> Voltar</button>
+                        <button type="button" class="btn btn-avancar" onclick="avancarBloco(2)">Avançar <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Bloco 3: Experiência Fenomenológica -->
+                <div class="bloco" id="bloco3">
+                    <div class="conceito-chave">
+                        <div class="conceito-titulo"><i class="fas fa-eye"></i> Observação Fenomenológica</div>
+                        <div class="conceito-descricao">
+                            Vamos observar suas experiências de estudo sem julgamentos, apenas descrevendo o que você sente e percebe.
+                        </div>
+                    </div>
+                    
+                    <div class="aviso">
+                        <i class="fas fa-heart"></i>
+                        <div>
+                            <strong>Espaço seguro e confidencial:</strong> Suas respostas nos ajudam a entender sua experiência única com os estudos.
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-feather-alt"></i> 7. Quando você pensa em "estudar", qual é a primeira sensação que vem à mente?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="sensacao" value="motivacao" required> 
+                                <span class="emoji-opcao">🚀</span> Empolgação e curiosidade
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sensacao" value="paz"> 
+                                <span class="emoji-opcao">😌</span> Paz e concentração
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sensacao" value="ansiedade"> 
+                                <span class="emoji-opcao">😰</span> Ansiedade e pressão
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sensacao" value="cansaco"> 
+                                <span class="emoji-opcao">😴</span> Cansaço e obrigação
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sensacao" value="confusao"> 
+                                <span class="emoji-opcao">🤔</span> Confusão e dúvida
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-comment-dots"></i> 8. Quais pensamentos frequentemente passam pela sua cabeça quando você está estudando?</h3>
+                        <div class="opcoes" id="pensamentos">
+                            <label class="opcao">
+                                <input type="checkbox" name="pensamento" value="duvida"> 
+                                <span class="emoji-opcao">❓</span> "Será que estou aprendendo?"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="pensamento" value="comparacao"> 
+                                <span class="emoji-opcao">📊</span> "Os outros devem estar estudando mais que eu"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="pensamento" value="pressao"> 
+                                <span class="emoji-opcao">⏰</span> "Preciso terminar isso rápido"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="pensamento" value="futuro"> 
+                                <span class="emoji-opcao">🔮</span> "Isso vai determinar meu futuro"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="pensamento" value="curiosidade"> 
+                                <span class="emoji-opcao">💡</span> "Que interessante descobrir isso"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="pensamento" value="nenhum"> 
+                                <span class="emoji-opcao">🧠</span> Consigo me concentrar sem muitos pensamentos
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-balance-scale"></i> 9. Como você lida com as dificuldades no estudo?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="dificuldade" value="persistencia" required> 
+                                <span class="emoji-opcao">💪</span> Persisto até entender
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="dificuldade" value="pausa"> 
+                                <span class="emoji-opcao">⏸️</span> Faço uma pausa e volto depois
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="dificuldade" value="ajuda"> 
+                                <span class="emoji-opcao">🤝</span> Busco ajuda de outras pessoas
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="dificuldade" value="evitamento"> 
+                                <span class="emoji-opcao">🚫</span> Evito as matérias mais difíceis
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="dificuldade" value="frustracao"> 
+                                <span class="emoji-opcao">😞</span> Fico frustrado e desisto por um tempo
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="botoes">
+                        <button type="button" class="btn btn-voltar" onclick="voltarBloco(3)"><i class="fas fa-arrow-left"></i> Voltar</button>
+                        <button type="button" class="btn btn-avancar" onclick="avancarBloco(3)">Avançar <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Bloco 4: Construtos Sociais e Significados -->
+                <div class="bloco" id="bloco4">
+                    <div class="conceito-chave">
+                        <div class="conceito-titulo"><i class="fas fa-cube"></i> Eidos e Construtos Sociais</div>
+                        <div class="conceito-descricao">
+                            Vamos explorar a essência (Eidos) por trás dos conceitos de estudo e aprendizagem, além dos construtos sociais que influenciam sua percepção.
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-university"></i> 10. O que "sucesso nos estudos" significa para você?</h3>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="radio" name="sucesso" value="notas" required> 
+                                <span class="emoji-opcao">📈</span> Boas notas e aprovação
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sucesso" value="aprendizado"> 
+                                <span class="emoji-opcao">🧠</span> Compreensão profunda do conteúdo
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sucesso" value="aplicacao"> 
+                                <span class="emoji-opcao">🔧</span> Poder aplicar o conhecimento na vida real
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sucesso" value="crescimento"> 
+                                <span class="emoji-opcao">🌱</span> Crescimento pessoal e autoconhecimento
+                            </label>
+                            <label class="opcao">
+                                <input type="radio" name="sucesso" value="outro"> 
+                                <span class="emoji-opcao">💫</span> Outro significado:
+                                <input type="text" class="campo-texto" id="outroSucesso" placeholder="Qual?" style="margin-left: 10px; width: 200px; display: none;">
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-shapes"></i> 11. Quais destes "construtos sociais" sobre estudos mais influenciam você?</h3>
+                        <p style="color: var(--bege); margin-bottom: 15px; font-size: 0.9rem;">
+                            Construtos sociais são ideias coletivas que moldam nossa percepção da realidade
+                        </p>
+                        <div class="opcoes">
+                            <label class="opcao">
+                                <input type="checkbox" name="construto" value="inteligencia"> 
+                                <span class="emoji-opcao">🧠</span> "Pessoas inteligentes tiram notas altas"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="construto" value="esforco"> 
+                                <span class="emoji-opcao">💪</span> "Quem se esforça sempre consegue"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="construto" value="competicao"> 
+                                <span class="emoji-opcao">🏆</span> "Estudar é uma competição"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="construto" value="carreira"> 
+                                <span class="emoji-opcao">💼</span> "Boa educação garante um bom emprego"
+                            </label>
+                            <label class="opcao">
+                                <input type="checkbox" name="construto" value="nenhum"> 
+                                <span class="emoji-opcao">🌟</span> Não me influencio por essas ideias
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="pergunta">
+                        <h3><i class="fas fa-project-diagram"></i> 12. Como você gostaria que fosse sua relação com os estudos?</h3>
+                        <textarea class="campo-texto" id="relacao-ideal" placeholder="Descreva como seria uma relação ideal e significativa com a aprendizagem..." rows="4"></textarea>
+                    </div>
+                    
+                    <div class="botoes">
+                        <button type="button" class="btn btn-voltar" onclick="voltarBloco(4)"><i class="fas fa-arrow-left"></i> Voltar</button>
+                        <button type="button" class="btn btn-enviar" onclick="window.location.href='painel.html'">
+                            Finalizar Jornada <i class="fas fa-flag-checkered"></i>
+                        </button>
+                                        </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- FORMULÁRIO DE CADASTRO DE PSICÓLOGO -->
+        <div class="formulario-psicologo" id="formularioPsicologo">
+            <h1>Cadastro de Psicólogo</h1>
+            <p class="subtitulo">Complete suas informações para se cadastrar na plataforma</p>
+           
+            <form id="form-psicologo">
+                <!-- Seção 1: Dados Profissionais -->
+                <div class="pergunta">
+                    <h3>Número do CRP (Conselho Regional de Psicologia):</h3>
+                    <input type="text" class="campo-texto" id="crp" placeholder="Digite seu número de registro no CRP" required>
+                </div>
+               
+                <div class="pergunta">
+                    <h3>Instituição de formação:</h3>
+                    <input type="text" class="campo-texto" id="instituicao" placeholder="Nome da instituição onde se formou" required>
+                </div>
+               
+                <div class="pergunta">
+                    <h3>Áreas de especialização/abordagem (ex: Terapia Cognitivo Comportamental, Ansiedade, etc...):</h3>
+                    <div class="opcoes" id="especializacoes">
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="tcc"> Terapia Cognitivo-Comportamental (TCC)
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="psicanalise"> Psicanálise
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="humanista"> Abordagem Humanista
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="ansiedade"> Ansiedade
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="depressao"> Depressão
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="relacionamentos"> Relacionamentos
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="autoestima"> Autoestima
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="orientacao-profissional"> Orientação Profissional
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="especializacao" value="outra"> Outra:
+                            <input type="text" class="campo-texto" id="outraEspecializacao" placeholder="Qual?" style="margin-left: 10px; width: 200px; display: none;">
+                        </label>
+                    </div>
+                </div>
+               
+                <div class="pergunta">
+                    <h3>Link para currículo Lattes (opcional):</h3>
+                    <input type="url" class="campo-texto" id="lattes" placeholder="https://lattes.cnpq.br/...">
+                </div>
+               
+                <!-- Seção 2: Informações Pessoais -->
+                <div class="pergunta">
+                    <h3>Breve biografia:</h3>
+                    <textarea class="campo-texto" id="biografia" placeholder="Conte um pouco sobre sua formação, experiência e abordagem" rows="4" required></textarea>
+                </div>
+               
+                <div class="pergunta">
+                    <h3>Disponibilidade de horários:</h3>
+                    <div class="opcoes">
+                        <label class="opcao">
+                            <input type="checkbox" name="disponibilidade" value="manha"> Manhã (8h-12h)
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="disponibilidade" value="tarde"> Tarde (13h-18h)
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="disponibilidade" value="noite"> Noite (19h-22h)
+                        </label>
+                        <label class="opcao">
+                            <input type="checkbox" name="disponibilidade" value="sabado"> Sábados
+                        </label>
+                    </div>
+                </div>
+               
+                <!-- Seção 3: Informações Financeiras -->
+                <div class="pergunta">
+                    <h3>Valor da sessão (ou se aceita algum convênio/plano que o app possa oferecer):</h3>
+                    <div class="escala-valores" id="valores-sessao">
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="50"> R$ 50
+                        </label>
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="70"> R$ 70
+                        </label>
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="90"> R$ 90
+                        </label>
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="110"> R$ 110
+                        </label>
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="130"> R$ 130
+                        </label>
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="150"> R$ 150
+                        </label>
+                        <label class="valor-sessao">
+                            <input type="radio" name="valor" value="outro"> Outro valor
+                        </label>
+                    </div>
+                    <div class="campo-personalizado" id="campo-valor-personalizado" style="display: none;">
+                        <input type="number" class="campo-texto" id="valor-personalizado" placeholder="Digite o valor personalizado">
+                    </div>
+                   
+                    <div class="checkbox-container" style="margin-top: 15px;">
+                        <input type="checkbox" id="aceita-convenio">
+                        <label for="aceita-convenio">Aceito pacientes através de convênios/planos oferecidos pelo app</label>
+                    </div>
+                </div>
+               
+                <div class="info-importante">
+                    <strong>Informação importante:</strong> Seus dados serão verificados junto ao CRP antes da ativação do seu perfil na plataforma. O processo pode levar até 3 dias úteis.
+                </div>
+               
+                <div class="botoes">
+                    <button type="button" class="btn btn-voltar" onclick="voltarTelaSelecao()">Voltar</button>
+                    <button type="button" class="btn btn-enviar" onclick="enviarCadastro(); window.location.href='perfilprof.html'">Finalizar Cadastro</button>                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÃO INICIAL =====
+        let blocoAtual = 1;
+        const totalBlocos = 4;
+        
+        // Matérias para a escala de conhecimento
+        const materias = [
+            { id: 'linguagens', nome: 'Linguagens', emoji: '📝' },
+            { id: 'humanas', nome: 'Ciências Humanas', emoji: '🌍' },
+            { id: 'natureza', nome: 'Ciências da Natureza', emoji: '🔬' },
+            { id: 'matematica', nome: 'Matemática', emoji: '📊' }
+        ];
+
+        // ===== FUNÇÕES DA TELA DE SELEÇÃO =====
+        function selecionarPerfil(perfil) {
+            const telaSelecao = document.getElementById('telaSelecao');
+            const questionarioEstudante = document.getElementById('questionarioEstudante');
+            const formularioPsicologo = document.getElementById('formularioPsicologo');
+            
+            if (perfil === 'estudante') {
+                telaSelecao.style.display = 'none';
+                questionarioEstudante.style.display = 'block';
+                inicializarQuestionario();
+            } else if (perfil === 'psicologo') {
+                telaSelecao.style.display = 'none';
+                formularioPsicologo.style.display = 'block';
+                configurarFormularioPsicologo();
+            }
+        }
+        
+        function voltarTelaSelecao() {
+            if (confirm('Tem certeza que deseja voltar? As informações preenchidas serão perdidas.')) {
+                document.getElementById('formularioPsicologo').style.display = 'none';
+                document.getElementById('telaSelecao').style.display = 'block';
+            }
+        }
+
+        // ===== FUNÇÕES DO QUESTIONÁRIO DO ESTUDANTE =====
+        function inicializarQuestionario() {
+            atualizarProgresso();
+            criarEscalasMaterias();
+            configurarEventListenersQuestionario();
+        }
+        
+        function criarEscalasMaterias() {
+            const container = document.getElementById('escalas-materias');
+            container.innerHTML = '';
+            
+            materias.forEach(materia => {
+                const escalaDiv = document.createElement('div');
+                escalaDiv.className = 'escala-materia';
+                escalaDiv.innerHTML = `
+                    <h4 style="margin: 20px 0 10px 0; color: var(--bege);">${materia.emoji} ${materia.nome}</h4>
+                    <div class="escala" id="escala-${materia.id}">
+                        ${[1, 2, 3, 4, 5].map(num => `
+                            <div class="ponto-escala" data-value="${num}" data-materia="${materia.id}">
+                                <div class="numero">${num}</div>
+                                <div class="descricao">${getDescricaoEscala(num)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(escalaDiv);
+            });
+        }
+        
+        function getDescricaoEscala(num) {
+            const descricoes = {
+                1: 'Muito difícil',
+                2: 'Difícil',
+                3: 'Neutro',
+                4: 'Fácil',
+                5: 'Muito fácil'
+            };
+            return descricoes[num] || '';
+        }
+        
+        function configurarEventListenersQuestionario() {
+            // Mostrar campo "Outro" quando selecionado
+            document.querySelectorAll('input[name="sucesso"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const outroCampo = document.getElementById('outroSucesso');
+                    outroCampo.style.display = this.value === 'outro' ? 'inline-block' : 'none';
+                    if (this.value !== 'outro') outroCampo.value = '';
+                });
+            });
+            
+            // Limitar seleção de pensamentos a 3
+            document.querySelectorAll('input[name="pensamento"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const selecionados = document.querySelectorAll('input[name="pensamento"]:checked');
+                    if (selecionados.length > 3) {
+                        this.checked = false;
+                        alert('Por favor, selecione no máximo 3 opções.');
+                    }
+                });
+            });
+            
+            // Escalas de conhecimento - seleção visual
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.ponto-escala')) {
+                    const ponto = e.target.closest('.ponto-escala');
+                    const materia = ponto.dataset.materia;
+                    const valor = ponto.dataset.value;
+                    
+                    // Remover seleção anterior nesta matéria
+                    const escala = document.getElementById(`escala-${materia}`);
+                    escala.querySelectorAll('.ponto-escala').forEach(p => {
+                        p.classList.remove('selecionada');
+                    });
+                    
+                    // Selecionar até este ponto
+                    let atual = ponto;
+                    while (atual) {
+                        atual.classList.add('selecionada');
+                        if (atual.previousElementSibling && 
+                            atual.previousElementSibling.classList.contains('ponto-escala')) {
+                            atual = atual.previousElementSibling;
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    // Armazenar valor
+                    if (!window.respostasMaterias) window.respostasMaterias = {};
+                    window.respostasMaterias[materia] = valor;
+                }
+            });
+        }
+        
+        function avancarBloco(bloco) {
+            if (validarBloco(bloco)) {
+                document.getElementById(`bloco${bloco}`).classList.remove('ativo');
+                blocoAtual = bloco + 1;
+                document.getElementById(`bloco${blocoAtual}`).classList.add('ativo');
+                atualizarProgresso();
+            }
+        }
+        
+        function voltarBloco(bloco) {
+            document.getElementById(`bloco${bloco}`).classList.remove('ativo');
+            blocoAtual = bloco - 1;
+            document.getElementById(`bloco${blocoAtual}`).classList.add('ativo');
+            atualizarProgresso();
+        }
+        
+        function atualizarProgresso() {
+            const progresso = (blocoAtual / totalBlocos) * 100;
+            document.getElementById('progress').style.width = `${progresso}%`;
+        }
+        
+        function validarBloco(bloco) {
+            switch(bloco) {
+                case 1:
+                    const nome = document.getElementById('nome').value;
+                    const relacao = document.querySelector('input[name="relacao"]:checked');
+                    const prazo = document.querySelector('input[name="prazo"]:checked');
+                    
+                    if (!nome.trim()) {
+                        alert('Por favor, digite seu nome.');
+                        return false;
+                    }
+                    if (!relacao) {
+                        alert('Por favor, selecione sua relação com os estudos.');
+                        return false;
+                    }
+                    if (!prazo) {
+                        alert('Por favor, selecione quando pretende alcançar seu objetivo.');
+                        return false;
+                    }
+                    break;
+                    
+                case 2:
+                    const etapa = document.querySelector('input[name="etapa"]:checked');
+                    const rotina = document.querySelector('input[name="rotina"]:checked');
+                    
+                    if (!etapa) {
+                        alert('Por favor, selecione sua etapa de estudos.');
+                        return false;
+                    }
+                    if (!rotina) {
+                        alert('Por favor, selecione como é sua rotina de estudos.');
+                        return false;
+                    }
+                    if (!window.respostasMaterias || Object.keys(window.respostasMaterias).length < materias.length) {
+                        alert('Por favor, avalie seu relacionamento com todas as áreas do conhecimento.');
+                        return false;
+                    }
+                    break;
+                    
+                case 3:
+                    const sensacao = document.querySelector('input[name="sensacao"]:checked');
+                    const dificuldade = document.querySelector('input[name="dificuldade"]:checked');
+                    
+                    if (!sensacao) {
+                        alert('Por favor, selecione qual sensação o estudo traz para você.');
+                        return false;
+                    }
+                    if (!dificuldade) {
+                        alert('Por favor, selecione como você lida com as dificuldades.');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+        
+        function enviarQuestionario() {
+            if (!validarBloco(4)) return;
+            
+            const sucesso = document.querySelector('input[name="sucesso"]:checked');
+            if (!sucesso) {
+                alert('Por favor, selecione o que sucesso nos estudos significa para você.');
+                return;
+            }
+            
+            // Coletar todas as respostas
+            const respostas = {
+                nome: document.getElementById('nome').value,
+                relacao: document.querySelector('input[name="relacao"]:checked').value,
+                prazo: document.querySelector('input[name="prazo"]:checked').value,
+                etapa: document.querySelector('input[name="etapa"]:checked').value,
+                rotina: document.querySelector('input[name="rotina"]:checked').value,
+                conhecimentoMaterias: window.respostasMaterias,
+                sensacao: document.querySelector('input[name="sensacao"]:checked').value,
+                pensamentos: Array.from(document.querySelectorAll('input[name="pensamento"]:checked')).map(cb => cb.value),
+                dificuldade: document.querySelector('input[name="dificuldade"]:checked').value,
+                sucesso: sucesso.value,
+                sucessoOutro: document.getElementById('outroSucesso').value,
+                construtos: Array.from(document.querySelectorAll('input[name="construto"]:checked')).map(cb => cb.value),
+                relacaoIdeal: document.getElementById('relacao-ideal').value
+            };
+            
+            // Salvar no localStorage
+            localStorage.setItem('perfilFenomenologico', JSON.stringify(respostas));
+            
+            // Mensagem personalizada
+            let mensagem = "Jornada fenomenológica concluída! 🎉\n\n";
+            mensagem += "Agora vamos analisar suas respostas para criar uma experiência personalizada.";
+            
+            alert(mensagem);
+            console.log('Respostas do questionário fenomenológico:', respostas);
+        }
+
+        // ===== FUNÇÕES DO FORMULÁRIO DE PSICÓLOGO =====
+        function configurarFormularioPsicologo() {
+            // Mostrar campo "Outra" quando selecionado em especializações
+            document.querySelectorAll('input[name="especializacao"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.value === 'outra') {
+                        const outroCampo = document.getElementById('outraEspecializacao');
+                        outroCampo.style.display = this.checked ? 'inline-block' : 'none';
+                        if (!this.checked) outroCampo.value = '';
+                    }
+                });
+            });
+           
+            // Seleção visual para valores de sessão
+            document.querySelectorAll('.valor-sessao').forEach(div => {
+                div.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    document.querySelectorAll('.valor-sessao').forEach(d => {
+                        d.classList.remove('selecionado');
+                    });
+                   
+                    // Selecionar atual
+                    this.classList.add('selecionado');
+                   
+                    // Marcar o radio button correspondente
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                   
+                    // Mostrar/ocultar campo de valor personalizado
+                    const campoPersonalizado = document.getElementById('campo-valor-personalizado');
+                    if (radio.value === 'outro') {
+                        campoPersonalizado.style.display = 'block';
+                    } else {
+                        campoPersonalizado.style.display = 'none';
+                    }
+                });
+            });
+           
+            // Limitar seleção de especializações a 5
+            document.querySelectorAll('input[name="especializacao"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const selecionados = document.querySelectorAll('input[name="especializacao"]:checked');
+                    if (selecionados.length > 5) {
+                        this.checked = false;
+                        alert('Por favor, selecione no máximo 5 especializações.');
+                    }
+                });
+            });
+        }
+       
+        function enviarCadastro() {
+            // Validações básicas
+            const crp = document.getElementById('crp').value;
+            const instituicao = document.getElementById('instituicao').value;
+            const especializacoes = document.querySelectorAll('input[name="especializacao"]:checked');
+            const biografia = document.getElementById('biografia').value;
+            const disponibilidade = document.querySelectorAll('input[name="disponibilidade"]:checked');
+            const valorSessao = document.querySelector('input[name="valor"]:checked');
+           
+            if (!crp.trim()) {
+                alert('Por favor, informe seu número do CRP.');
+                return;
+            }
+           
+            if (!instituicao.trim()) {
+                alert('Por favor, informe sua instituição de formação.');
+                return;
+            }
+           
+            if (especializacoes.length === 0) {
+                alert('Por favor, selecione pelo menos uma área de especialização.');
+                return;
+            }
+           
+            if (!biografia.trim()) {
+                alert('Por favor, preencha sua biografia.');
+                return;
+            }
+           
+            if (disponibilidade.length === 0) {
+                alert('Por favor, selecione sua disponibilidade de horários.');
+                return;
+            }
+           
+            if (!valorSessao) {
+                alert('Por favor, selecione o valor da sessão.');
+                return;
+            }
+           
+            if (valorSessao.value === 'outro') {
+                const valorPersonalizado = document.getElementById('valor-personalizado').value;
+                if (!valorPersonalizado || valorPersonalizado <= 0) {
+                    alert('Por favor, informe um valor válido para a sessão.');
+                    return;
+                }
+            }
+           
+            // Coletar dados do formulário
+            const dadosPsicologo = {
+                crp: crp,
+                instituicao: instituicao,
+                especializacoes: Array.from(especializacoes).map(cb => {
+                    if (cb.value === 'outra') {
+                        return document.getElementById('outraEspecializacao').value;
+                    }
+                    return cb.value;
+                }),
+                lattes: document.getElementById('lattes').value,
+                biografia: biografia,
+                disponibilidade: Array.from(disponibilidade).map(cb => cb.value),
+                valorSessao: valorSessao.value === 'outro' ?
+                    document.getElementById('valor-personalizado').value :
+                    valorSessao.value,
+                aceitaConvenio: document.getElementById('aceita-convenio').checked
+            };
+           
+            // Salvar no localStorage
+            localStorage.setItem('dadosPsicologo', JSON.stringify(dadosPsicologo));
+           
+            // Exibir mensagem de sucesso
+            alert('Cadastro enviado com sucesso! Seus dados serão verificados e entraremos em contato em até 3 dias úteis.');
+           
+            console.log('Dados do psicólogo:', dadosPsicologo);
+        }
+
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Garantir que apenas a tela de seleção esteja visível inicialmente
+            document.getElementById('telaSelecao').style.display = 'block';
+            document.getElementById('questionarioEstudante').style.display = 'none';
+            document.getElementById('formularioPsicologo').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

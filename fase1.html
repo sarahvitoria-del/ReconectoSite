@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Fundamentos da Epoché - Parentese</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIÁVEIS E RESET ===== */
+        :root {
+            --preto: #0A0A0A;
+            --preto-escuro: #000000;
+            --preto-medio: #1A1A1A;
+            --dourado: #D4AF37;
+            --dourado-brilho: #F7EF8A;
+            --dourado-escuro: #AA8625;
+            --dourado-medio: #EDC967;
+            --branco: #F5F5F5;
+            --bege: #F0E6D2;
+            --cinza: #404040;
+            
+            --font-primary: 'Cinzel', serif;
+            --font-secondary: 'Montserrat', sans-serif;
+            
+            --gradiente-dourado: linear-gradient(135deg, #D4AF37 0%, #F7EF8A 100%);
+            --gradiente-escuro: linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gradiente-escuro);
+            color: var(--branco);
+            font-family: var(--font-secondary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===== FUNDO COM ESTRELAS ===== */
+        .stars-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: var(--dourado);
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        .star.small {
+            width: 2px;
+            height: 2px;
+        }
+
+        .star.medium {
+            width: 3px;
+            height: 3px;
+        }
+
+        .star.large {
+            width: 4px;
+            height: 4px;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradiente-dourado);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav a {
+            color: var(--bege);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav a:hover {
+            color: var(--dourado);
+        }
+
+        .nav a.active {
+            color: var(--dourado);
+        }
+
+        .nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradiente-dourado);
+        }
+
+        /* ===== LAYOUT DO MÓDULO ===== */
+        .module-page {
+            display: flex;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(10, 10, 10, 0.8);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-title {
+            font-family: var(--font-primary);
+            font-size: 1.4rem;
+            color: var(--dourado);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .module-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .module-nav a {
+            color: var(--bege);
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .module-nav a:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--dourado);
+            border-left-color: var(--dourado);
+        }
+
+        .sidebar-tip {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            text-align: center;
+        }
+
+        .sidebar-tip p {
+            color: var(--dourado);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Conteúdo Principal */
+        .module-content {
+            margin-left: 300px;
+            flex: 1;
+            padding: 3rem;
+            max-width: 900px;
+        }
+
+        .module-title {
+            font-family: var(--font-primary);
+            font-size: 2.5rem;
+            color: var(--dourado);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--dourado) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .module-intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            color: var(--bege);
+            border-left: 4px solid var(--dourado);
+            padding-left: 1.5rem;
+        }
+
+        /* ===== SEÇÕES DO CONTEÚDO ===== */
+        .section-block {
+            margin-bottom: 4rem;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradiente-dourado);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .section-block:hover::before {
+            transform: scaleX(1);
+        }
+
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .gold-accent {
+            color: var(--dourado);
+        }
+
+        /* Diagnóstico Energético */
+        .energy-diagnostic h4 {
+            color: var(--dourado);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .energy-visualizer {
+            background: rgba(10, 10, 10, 0.5);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .bar-container {
+            margin-bottom: 2rem;
+        }
+
+        .bar-label {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--bege);
+        }
+
+        .bar {
+            display: flex;
+            height: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .bar span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+            padding: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .before span:first-child {
+            background: var(--dourado);
+            color: var(--preto);
+        }
+
+        .before span:last-child {
+            background: #B46A6A;
+            color: var(--branco);
+        }
+
+        .after span:first-child {
+            background: var(--dourado);
+            color: var(--preto);
+        }
+
+        .after span:last-child {
+            background: rgba(212, 175, 55, 0.3);
+            color: var(--branco);
+        }
+
+        /* Metáfora e Técnicas */
+        .metaphor {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--dourado);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .metaphor .icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .steps {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .steps li {
+            background: rgba(212, 175, 55, 0.05);
+            padding: 1rem 1rem 1rem 3rem;
+            margin-bottom: 0.8rem;
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .steps li::before {
+            content: counter(step);
+            counter-increment: step;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--dourado);
+            color: var(--preto);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Botões */
+        .action-button {
+            background: var(--gradiente-dourado);
+            color: var(--preto);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .action-button.primary {
+            background: var(--gradiente-dourado);
+        }
+
+        /* Caixas de Exemplo */
+        .example-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--dourado);
+            margin-bottom: 1rem;
+        }
+
+        .instruction {
+            font-style: italic;
+            color: var(--bege);
+            margin: 1rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid var(--dourado);
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: var(--bege);
+            opacity: 0.8;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+            .module-content {
+                margin-left: 250px;
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav {
+                gap: 1rem;
+            }
+            
+            .module-page {
+                flex-direction: column;
+                padding-top: 120px;
+            }
+            
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+            }
+            
+            .module-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            
+            .module-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .module-nav a {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .module-nav a:hover {
+                border-left-color: transparent;
+                border-bottom-color: var(--dourado);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .module-title {
+                font-size: 2rem;
+            }
+            
+            .section-block {
+                padding: 1.5rem;
+            }
+            
+            .bar {
+                height: 30px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo com Estrelas -->
+    <div class="stars-background" id="starsBackground"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="logo">Parentese</h1>
+        <nav class="nav">
+            <a href="painel.html">Início</a>
+            <a href="#" class="active">Fundamentos</a>
+            <a href="fase2.html">Genealogia</a>
+            <a href="forum.html">Comunidade</a>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="module-page">
+        <!-- Sidebar de Navegação -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Módulo 1: Fenomenologia em 3 Passos</h3>
+            <nav class="module-nav">
+                <a href="#diagnostico">1. Diagnóstico Energético</a>
+                <a href="#arte-parentesear">2. A Arte do Parentesear</a>
+                <a href="#observacao">3. Exercício: Observação Pura</a>
+                <a href="#rastreamento">4. Exercício: Rastreamento Emocional</a>
+                <a href="#desmontagem">5. Exercício: Desmontagem de Signos</a>
+            </nav>
+            <div class="sidebar-tip">
+                <p>Meta: Estudo = 90% Conteúdo Puro</p>
+            </div>
+        </aside>
+
+        <!-- Conteúdo do Módulo -->
+        <section class="module-content">
+            <h2 class="module-title">Fase I: Fundamentos - Aprender a Parentesear</h2>
+            <p class="module-intro">
+                Nesta fase, você fará um diagnóstico do seu gasto mental atual e aprenderá a ferramenta essencial da fenomenologia: a **Epoché**, ou o **Parenteseamento**. Não vamos lutar contra os pensamentos, mas observá-los sem nos identificar.
+            </p>
+
+            <!-- Seção 1: Diagnóstico Energético -->
+            <article id="diagnostico" class="section-block">
+                <h3 class="section-title gold-accent">1. Diagnóstico Energético</h3>
+                <p>
+                    Aprender a estudar é, primariamente, uma questão de **Economia Energética**. Antes da Epoché, sua mente gasta uma porcentagem enorme lidando com medos, comparações e pressões.
+                </p>
+                
+                <div class="energy-diagnostic">
+                    <h4>Mapa do Gasto Mental</h4>
+                    <div class="energy-visualizer">
+                        <div class="bar-container">
+                            <div class="bar-label">Antes do Parentese:</div>
+                            <div class="bar before">
+                                <span style="width: 40%;" title="40% Conteúdo Real">Conteúdo (40%)</span>
+                                <span style="width: 60%;" title="60% Gerenciamento de Construtos/Emoções">Construtos (60%)</span>
+                            </div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-label">Após o Parentese:</div>
+                            <div class="bar after">
+                                <span style="width: 90%;" title="90% Conteúdo Real">Conteúdo (90%)</span>
+                                <span style="width: 10%;" title="10% Observação Consciente">Observação (10%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Seção 2: A Arte do Parentesear -->
+            <article id="arte-parentesear" class="section-block">
+                <h3 class="section-title gold-accent">2. A Arte do Parentesear (Epoché)</h3>
+                <div class="metaphor">
+                    <span class="icon">🌊</span> 
+                    <strong>Metáfora Central: "O Rio dos Pensamentos"</strong>
+                    <br>
+                    Você não é a água agitada do rio; você é a <strong>margem</strong>, vasta e imóvel, observando os construtos (as folhas flutuantes) passarem sem pular neles.
+                </div>
+
+                <h4>Técnica: Etiquetamento Neutro</h4>
+                <ol class="steps">
+                    <li><strong>Identifique:</strong> "Ah, isso é um construto sobre 'ser insuficiente'."</li>
+                    <li><strong>Parenteseie:</strong> "Estou colocando essa história entre parênteses → (insuficiente)."</li>
+                    <li><strong>Observe:</strong> "Interessante como esse pensamento surge agora, durante a leitura."</li>
+                    <li><strong>Retorne:</strong> "Agora, de volta ao conteúdo puro."</li>
+                </ol>
+                
+                <button class="action-button">
+                    <span class="icon">⏰</span> Exercício de 3 Minutos: Reset Parentético
+                </button>
+            </article>
+            
+            <!-- Seção 3: Observação Pura -->
+            <article id="observacao" class="section-block">
+                <h3 class="section-title gold-accent">3. Exercício 1: Observação Pura</h3>
+                <div class="example-box">
+                    <p class="example-title">Exemplo: A Epoché no Estudo de Matemática</p>
+                    <p>Observe esta equação: x² + y² = 25</p>
+                    <p class="instruction">Descreva apenas o que vê, sem tentar resolver. Que formas? Que cores? Que sensações puras? (Parenteseie o medo de errar).</p>
+                </div>
+                <a href="DiárioFenomenológico.html" class="action-button primary">
+                    <span class="icon">✍️</span> Abrir Diário Fenomenológico
+                </a>
+            </article>
+            
+            <!-- Seção 4: Rastreamento Emocional -->
+            <article id="rastreamento" class="section-block">
+                <h3 class="section-title gold-accent">4. Exercício 2: Rastreamento Emocional</h3>
+                <p>Use o Diário para registrar suas emoções <strong>durante</strong> o estudo. Não julgue, apenas etiquete.</p>
+                <p class="instruction">Pergunte: "Quando sinto frustração? O que dispara isso? Qual construto estava ativo neste momento?"</p>
+                <p class="note">Isso permite identificar o <strong>custo real</strong> dos construtos em sua jornada.</p>
+            </article>
+
+        </section>
+    </main>
+
+    <script>
+        // Criar estrelas no fundo
+        function createStars() {
+            const starsContainer = document.getElementById('starsBackground');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 4;
+                const duration = Math.random() * 3 + 2;
+                
+                star.className = `star ${size > 2.5 ? 'large' : size > 1.5 ? 'medium' : 'small'}`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.animationDelay = `${delay}s`;
+                star.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Inicializar estrelas quando a página carregar
+        document.addEventListener('DOMContentLoaded', createStars);
+
+        // Scroll suave para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animação das barras de energia
+        function animateEnergyBars() {
+            const bars = document.querySelectorAll('.bar span');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        }
+
+        // Animar barras quando a seção ficar visível
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateEnergyBars();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const diagnosticSection = document.getElementById('diagnostico');
+        if (diagnosticSection) {
+            observer.observe(diagnosticSection);
+        }
+    </script>
+</body>
+</html>

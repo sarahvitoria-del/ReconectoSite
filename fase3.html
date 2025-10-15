@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3: Encontrando o Eidos - Parentese</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIÁVEIS E RESET ===== */
+        :root {
+            --preto: #0A0A0A;
+            --preto-escuro: #000000;
+            --preto-medio: #1A1A1A;
+            --dourado: #D4AF37;
+            --dourado-brilho: #F7EF8A;
+            --dourado-escuro: #AA8625;
+            --dourado-medio: #EDC967;
+            --branco: #F5F5F5;
+            --bege: #F0E6D2;
+            --cinza: #404040;
+            
+            --font-primary: 'Cinzel', serif;
+            --font-secondary: 'Montserrat', sans-serif;
+            
+            --gradiente-dourado: linear-gradient(135deg, #D4AF37 0%, #F7EF8A 100%);
+            --gradiente-escuro: linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gradiente-escuro);
+            color: var(--branco);
+            font-family: var(--font-secondary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===== FUNDO COM ESTRELAS ===== */
+        .stars-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: var(--dourado);
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        .star.small {
+            width: 2px;
+            height: 2px;
+        }
+
+        .star.medium {
+            width: 3px;
+            height: 3px;
+        }
+
+        .star.large {
+            width: 4px;
+            height: 4px;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradiente-dourado);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav a {
+            color: var(--bege);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav a:hover {
+            color: var(--dourado);
+        }
+
+        .nav a.active {
+            color: var(--dourado);
+        }
+
+        .nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradiente-dourado);
+        }
+
+        /* ===== LAYOUT DO MÓDULO ===== */
+        .module-page {
+            display: flex;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(10, 10, 10, 0.8);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-title {
+            font-family: var(--font-primary);
+            font-size: 1.4rem;
+            color: var(--dourado);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .module-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .module-nav a {
+            color: var(--bege);
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .module-nav a:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--dourado);
+            border-left-color: var(--dourado);
+        }
+
+        .sidebar-tip {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            text-align: center;
+        }
+
+        .sidebar-tip p {
+            color: var(--dourado);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Conteúdo Principal */
+        .module-content {
+            margin-left: 300px;
+            flex: 1;
+            padding: 3rem;
+            max-width: 1000px;
+        }
+
+        .module-title {
+            font-family: var(--font-primary);
+            font-size: 2.5rem;
+            color: var(--dourado);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--dourado) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .module-intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            color: var(--bege);
+            border-left: 4px solid var(--dourado);
+            padding-left: 1.5rem;
+        }
+
+        /* ===== SEÇÕES DO CONTEÚDO ===== */
+        .section-block {
+            margin-bottom: 4rem;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradiente-dourado);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .section-block:hover::before {
+            transform: scaleX(1);
+        }
+
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .gold-accent {
+            color: var(--dourado);
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Exercício de Imaginação Livre */
+        .guided-meditation-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .steps {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .steps li {
+            background: rgba(212, 175, 55, 0.05);
+            padding: 1rem 1rem 1rem 3rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .steps li::before {
+            content: counter(step);
+            counter-increment: step;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--dourado);
+            color: var(--preto);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Diagrama Núcleo vs Periferia */
+        .core-periphery-diagram {
+            position: relative;
+            height: 400px;
+            margin: 3rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .periphery {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .element-tag {
+            position: absolute;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--bege);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .element-tag:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .element-tag:nth-child(1) { top: 10%; left: 50%; transform: translateX(-50%); }
+        .element-tag:nth-child(2) { top: 30%; right: 10%; }
+        .element-tag:nth-child(3) { bottom: 30%; right: 10%; }
+        .element-tag:nth-child(4) { bottom: 10%; left: 50%; transform: translateX(-50%); }
+        .element-tag:nth-child(5) { bottom: 30%; left: 10%; }
+        .element-tag:nth-child(6) { top: 30%; left: 10%; }
+
+        .core-wrapper {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--gradiente-dourado);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+            50% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.8); }
+        }
+
+        .core-essence {
+            text-align: center;
+            color: var(--preto);
+        }
+
+        .core-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .eidos-user-input {
+            font-family: var(--font-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Caixa de Ferramentas Eidéticas */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: rgba(10, 10, 10, 0.5);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dourado);
+        }
+
+        .tool-title {
+            color: var(--dourado);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .tool-description {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--bege);
+        }
+
+        /* Projeção Fenomenológica */
+        .rules-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .rules-box h4 {
+            color: var(--dourado);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .list-rules {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-rules li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .list-rules li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--dourado);
+        }
+
+        .list-rules li:last-child {
+            border-bottom: none;
+        }
+
+        /* Botões */
+        .action-button {
+            background: var(--gradiente-dourado);
+            color: var(--preto);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .action-button.primary {
+            background: var(--gradiente-dourado);
+        }
+
+        .action-button.large-button {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .instruction {
+            font-style: italic;
+            color: var(--bege);
+            margin: 1rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid var(--dourado);
+        }
+
+        .note-final {
+            font-size: 0.9rem;
+            color: var(--bege);
+            opacity: 0.8;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+            .module-content {
+                margin-left: 250px;
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav {
+                gap: 1rem;
+            }
+            
+            .module-page {
+                flex-direction: column;
+                padding-top: 120px;
+            }
+            
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+            }
+            
+            .module-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            
+            .module-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .module-nav a {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .module-nav a:hover {
+                border-left-color: transparent;
+                border-bottom-color: var(--dourado);
+            }
+
+            .core-periphery-diagram {
+                height: 300px;
+            }
+
+            .periphery {
+                width: 280px;
+                height: 280px;
+            }
+
+            .core-wrapper {
+                width: 120px;
+                height: 120px;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .module-title {
+                font-size: 2rem;
+            }
+            
+            .section-block {
+                padding: 1.5rem;
+            }
+            
+            .core-periphery-diagram {
+                height: 250px;
+            }
+
+            .periphery {
+                width: 220px;
+                height: 220px;
+            }
+
+            .core-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .element-tag {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo com Estrelas -->
+    <div class="stars-background" id="starsBackground"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="logo">Parentese</h1>
+        <nav class="nav">
+            <a href="painel.html">Início</a>
+            <a href="fase1.html">Fundamentos</a>
+            <a href="fase2.html">Genealogia</a>
+            <a href="#" class="active">Cerne</a>
+            <a href="forum.html">Comunidade</a>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="module-page">
+        <!-- Sidebar de Navegação -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Módulo 3: Eidos e Essências</h3>
+            <nav class="module-nav">
+                <a href="#eidos-intro">O que é Eidos?</a>
+                <a href="#imaginacao">Imaginação Livre Guiada</a>
+                <a href="#caixa-ferramentas">Caixa de Ferramentas Eidéticas</a>
+                <a href="#projecao">Projeção Fenomenológica</a>
+            </nav>
+            <div class="sidebar-tip">
+                <p>O que resta quando tudo o que é externo é removido? Essa é sua Essência.</p>
+            </div>
+        </aside>
+
+        <!-- Conteúdo do Módulo -->
+        <section class="module-content">
+            <h2 class="module-title">Fase III: Cerne - Encontrar o Eidos (Essência Pura)</h2>
+            <p id="eidos-intro" class="module-intro">
+                Após parentesear os construtos (Fase I) e desconstruir os saberes (Fase II), chegamos ao cerne: o **Eidos**. O Eidos é a estrutura essencial e invariável do objeto de sua consciência. É a **estrutura pura** do seu aprender.
+            </p>
+            
+            <!-- Exercício da Imaginação Livre -->
+            <article id="imaginacao" class="section-block">
+                <h3 class="section-title gold-accent"><span class="icon">🌌</span> 1. Exercício da Imaginação Livre Guiada</h3>
+                <p>
+                    A <em>variação eidética</em> é o método para isolar o Eidos. Você irá, mentalmente, variar o objeto (ex: "estudar") em diferentes contextos e formas, até que a essência fundamental permaneça.
+                </p>
+                
+                <div class="guided-meditation-box">
+                    <p class="example-title">Pergunta Central: "O que permanece quando removemos todas as características acidentais do 'estudar'?"</p>
+                    <ol class="steps">
+                        <li><strong>Imagine:</strong> Estudar com prazer vs. Estudar por obrigação. O que muda? O que permanece?</li>
+                        <li><strong>Imagine:</strong> Aprender sozinho vs. Aprender em grupo. O que é invariável?</li>
+                        <li><strong>Imagine:</strong> Aprender sobre um tema fascinante vs. um tema tedioso. Qual é o núcleo que não se altera?</li>
+                        <li><strong>Imagine:</strong> Estudar para uma prova vs. Estudar por curiosidade. O que é essencial em ambos?</li>
+                    </ol>
+                    <p class="instruction">O que permaneceu é o seu Eidos: <strong>Conexão? Crescimento? Descoberta? Compreensão?</strong></p>
+                </div>
+                
+                <button class="action-button">
+                    <span class="icon">🎧</span> Iniciar Meditação Guiada
+                </button>
+            </article>
+
+            <!-- Caixa de Ferramentas Eidéticas -->
+            <article id="caixa-ferramentas" class="section-block">
+                <h3 class="section-title gold-accent"><span class="icon">🎯</span> 2. Caixa de Ferramentas Eidéticas</h3>
+                <p>Técnicas para identificar estruturas essenciais e visualizar o núcleo vs. periferia do seu aprendizado.</p>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">🔍</div>
+                        <h4 class="tool-title">Redução Fenomenológica</h4>
+                        <p class="tool-description">Suspenda sistematicamente cada aspecto não-essencial até chegar ao núcleo invariável da experiência.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">🔄</div>
+                        <h4 class="tool-title">Variação Eidética</h4>
+                        <p class="tool-description">Varie mentalmente as características do objeto para descobrir o que permanece constante em todas as variações.</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">💎</div>
+                        <h4 class="tool-title">Extração da Essência</h4>
+                        <p class="tool-description">Identifique o elemento sem o qual o fenômeno perderia sua identidade fundamental.</p>
+                    </div>
+                </div>
+
+                <!-- Diagrama Interativo Núcleo vs Periferia -->
+                <h4 style="margin: 2rem 0 1rem 0; color: var(--dourado);">Diagrama: Núcleo Essencial vs. Periferia Acidental</h4>
+                <div class="core-periphery-diagram">
+                    <div class="periphery">
+                        <span class="element-tag" data-remove="true">Comparação</span>
+                        <span class="element-tag" data-remove="true">Medo do Fracasso</span>
+                        <span class="element-tag" data-remove="true">Pressão Social</span>
+                        <span class="element-tag" data-remove="true">Notas e Avaliações</span>
+                        <span class="element-tag" data-remove="true">Expectativas</span>
+                        <span class="element-tag" data-remove="true">Competição</span>
+                        <div class="core-wrapper">
+                            <div class="core-essence">
+                                <p class="core-label">Meu Eidos Pessoal</p>
+                                <span class="eidos-user-input" id="eidos-display">DESCOBERTA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instruction">
+                    <strong>Instrução Interativa:</strong> Clique nos elementos da periferia para removê-los (simulando o parenteseamento) e observe como o Eidos central se torna mais evidente.
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <label for="eidos-input" style="color: var(--dourado); font-weight: 600;">Personalize seu Eidos:</label>
+                    <input type="text" id="eidos-input" placeholder="Digite sua essência..." style="
+                        background: rgba(255,255,255,0.1);
+                        border: 1px solid rgba(212,175,55,0.3);
+                        border-radius: 8px;
+                        padding: 0.8rem;
+                        color: var(--branco);
+                        margin-left: 1rem;
+                        width: 200px;
+                    ">
+                    <button onclick="updateEidos()" class="action-button" style="margin-left: 1rem; padding: 0.8rem 1.5rem;">
+                        Atualizar
+                    </button>
+                </div>
+            </article>
+
+            <!-- Projeção Fenomenológica -->
+            <article id="projecao" class="section-block">
+                <h3 class="section-title gold-accent"><span class="icon">✨</span> 3. Projeção Fenomenológica</h3>
+                <p>
+                    Com o Eidos encontrado, você não precisa mais seguir as regras de estudo impostas pela periferia. Você co-cria a sua própria jornada baseada na essência pura.
+                </p>
+                
+                <div class="rules-box">
+                    <h4>Minhas Novas Regras de Estudo (Baseadas no Eidos)</h4>
+                    <ul class="list-rules">
+                        <li><strong>Regra 1:</strong> Meu sucesso será medido pela profundidade da <strong>DESCOBERTA</strong>, e não pela nota.</li>
+                        <li><strong>Regra 2:</strong> Se a Frustração surgir, eu faço um <strong>Reset Parentético</strong> de 5 minutos antes de continuar.</li>
+                        <li><strong>Regra 3:</strong> Meu ambiente de estudo deve nutrir a <strong>CURIOSIDADE</strong>, não a performance.</li>
+                        <li><strong>Regra 4:</strong> Darei espaço para o <strong>PROCESSO</strong>, não apenas para o resultado final.</li>
+                    </ul>
+                </div>
+                
+                <button class="action-button primary large-button">
+                    <span class="icon">➡️</span> Próximo: Resignificando sua Jornada (Fase IV)
+                </button>
+            </article>
+
+        </section>
+    </main>
+
+    <script>
+        // Criar estrelas no fundo
+        function createStars() {
+            const starsContainer = document.getElementById('starsBackground');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 4;
+                const duration = Math.random() * 3 + 2;
+                
+                star.className = `star ${size > 2.5 ? 'large' : size > 1.5 ? 'medium' : 'small'}`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.animationDelay = `${delay}s`;
+                star.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Interatividade do diagrama
+        function initDiagramInteractivity() {
+            const elements = document.querySelectorAll('.element-tag[data-remove="true"]');
+            
+            elements.forEach(element => {
+                element.addEventListener('click', function() {
+                    this.style.opacity = '0.3';
+                    this.style.transform = 'scale(0.8)';
+                    this.style.pointerEvents = 'none';
+                    
+                    // Aumentar brilho do núcleo
+                    const core = document.querySelector('.core-wrapper');
+                    core.style.boxShadow = '0 0 60px rgba(212, 175, 55, 1)';
+                    
+                    setTimeout(() => {
+                        core.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.5)';
+                    }, 1000);
+                });
+            });
+        }
+
+        // Atualizar Eidos personalizado
+        function updateEidos() {
+            const input = document.getElementById('eidos-input');
+            const display = document.getElementById('eidos-display');
+            
+            if (input.value.trim() !== '') {
+                display.textContent = input.value.toUpperCase();
+                input.value = '';
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            initDiagramInteractivity();
+            
+            // Scroll suave para âncoras
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Enter para atualizar Eidos
+            document.getElementById('eidos-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    updateEidos();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

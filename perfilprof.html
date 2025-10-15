@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Profissional - Reconecto</title>
+    <style>
+        :root {
+            --preto: #0A0A0A;
+            --dourado: #D4AF37;
+            --branco: #F5F5F5;
+            --cinza: #404040;
+            --cinza-claro: #8a8a8a;
+            --bege: #F0E6D2;
+            --verde: #2E8B57;
+            --vermelho: #8B0000;
+            --fundo-card: rgba(64, 64, 64, 0.2);
+            --azul-psicologo: rgba(65, 105, 225, 0.1);
+            --borda-psicologo: #4169E1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cinza);
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: var(--fundo-card);
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 3px solid var(--dourado);
+        }
+        
+        .card.psicologo {
+            border-left-color: var(--borda-psicologo);
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--dourado);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--preto);
+            margin-bottom: 20px;
+            border: 3px solid var(--borda-psicologo);
+        }
+        
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .profile-title {
+            color: var(--borda-psicologo);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .profile-crp {
+            background: var(--borda-psicologo);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            color: var(--dourado);
+            font-size: 1.2rem;
+        }
+        
+        .rating-value {
+            font-weight: 600;
+        }
+        
+        .rating-count {
+            color: var(--cinza-claro);
+            font-size: 0.9rem;
+        }
+        
+        .profile-bio {
+            text-align: center;
+            color: var(--bege);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--dourado);
+            color: var(--preto);
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #E6C158;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.1rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--cinza-claro);
+        }
+        
+        .info-value {
+            font-weight: 500;
+        }
+        
+        .specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .specialty {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--dourado);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .time-slot {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--cinza);
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            border-color: var(--dourado);
+        }
+        
+        .time-slot.selected {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--dourado);
+        }
+        
+        .session-pricing {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dourado);
+        }
+        
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--cinza-claro);
+        }
+        
+        .reviews-section {
+            margin-top: 30px;
+        }
+        
+        .review {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--cinza);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .review-content {
+            line-height: 1.5;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid var(--cinza);
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--dourado);
+            color: var(--dourado);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .availability-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .availability-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Reconecto</div>
+            <div class="nav-buttons">
+                <a href="painel.html" class="nav-btn">Voltar para o Painel</a>
+                <a href="ProfDispo.html" class="nav-btn">Buscar Profissionais</a>
+                <button class="nav-btn">Minha Conta</button>
+            </div>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="card profile-header psicologo">
+                <div class="profile-avatar">CS</div>
+                <h1 class="profile-name">Dr. Carlos Silva</h1>
+                <div class="profile-title">Psicólogo Clínico</div>
+                <div class="profile-crp">CRP: 08/12345</div>
+                
+                <div class="rating">
+                    <div class="stars">★★★★★</div>
+                    <div class="rating-value">4.9</div>
+                    <div class="rating-count">(47 avaliações)</div>
+                </div>
+                
+                <p class="profile-bio">
+                    Especialista em ansiedade e estresse pré-vestibular. Atendo há 8 anos focando no bem-estar emocional de estudantes.
+                </p>
+                
+                <div class="action-buttons">
+                    <button class="btn-primary" id="agendarConsulta">Agendar Consulta</button>
+                    <button class="btn-secondary">Enviar Mensagem</button>
+                </div>
+            </div>
+            
+            <div class="card psicologo">
+                <h2 class="section-title">📞 Contato</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">E-mail</div>
+                        <div class="info-value">carlos.silva@psicologia.com</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Telefone</div>
+                        <div class="info-value">(41) 99999-9999</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">WhatsApp</div>
+                        <div class="info-value">(41) 98888-8888</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Site</div>
+                        <div class="info-value">www.drcarlossilva.com.br</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card psicologo">
+                <h2 class="section-title">📍 Localização</h2>
+                <div class="info-item">
+                    <div class="info-label">Consultório</div>
+                    <div class="info-value">Rua das Flores, 123 - Centro</div>
+                    <div class="info-value">Curitiba - PR</div>
+                </div>
+                <div class="info-item" style="margin-top: 15px;">
+                    <div class="info-label">Atendimento Online</div>
+                    <div class="info-value">Disponível</div>
+                </div>
+            </div>
+        </aside>
+        
+        <main>
+            <div class="card psicologo">
+                <div class="tab-navigation">
+                    <div class="tab active" data-tab="sobre">Sobre</div>
+                    <div class="tab" data-tab="especialidades">Especialidades</div>
+                    <div class="tab" data-tab="agenda">Agenda</div>
+                    <div class="tab" data-tab="avaliacoes">Avaliações</div>
+                </div>
+                
+                <div class="tab-content active" id="sobre">
+                    <div class="info-section">
+                        <h2 class="section-title">👨‍🎓 Formação</h2>
+                        <div class="info-item">
+                            <div class="info-label">Instituição</div>
+                            <div class="info-value">Universidade Federal do Paraná (UFPR)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Ano de Formatura</div>
+                            <div class="info-value">2015</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Pós-graduação</div>
+                            <div class="info-value">Terapia Cognitivo-Comportamental - PUC-PR</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="section-title">💼 Experiência Profissional</h2>
+                        <div class="info-item">
+                            <div class="info-value">• 8 anos de experiência clínica</div>
+                            <div class="info-value">• Especialista em ansiedade e estresse pré-vestibular</div>
+                            <div class="info-value">• Palestrante em escolas e cursinhos preparatórios</div>
+                            <div class="info-value">• Supervisor de estágio em TCC</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="section-title">📋 Abordagem</h2>
+                        <p>
+                            Minha abordagem é baseada na Terapia Cognitivo-Comportamental (TCC), focada em identificar e modificar 
+                            padrões de pensamento e comportamentos que causam sofrimento. Trabalho especialmente com estudantes 
+                            vestibulandos, ajudando a desenvolver estratégias para lidar com a pressão, ansiedade e melhorar o 
+                            desempenho nos estudos.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="especialidades">
+                    <div class="info-section">
+                        <h2 class="section-title">🎯 Áreas de Atuação</h2>
+                        <div class="specialties">
+                            <div class="specialty">Ansiedade</div>
+                            <div class="specialty">Estresse Pré-vestibular</div>
+                            <div class="specialty">TDAH</div>
+                            <div class="specialty">Síndrome do Burnout</div>
+                            <div class="specialty">Orientação Profissional</div>
+                            <div class="specialty">Terapia Cognitivo-Comportamental</div>
+                            <div class="specialty">Mindfulness</div>
+                            <div class="specialty">Técnicas de Estudo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h2 class="section-title">🩺 Tratamentos Oferecidos</h2>
+                        <div class="info-item">
+                            <div class="info-value">• Terapia individual para adolescentes e adultos</div>
+                            <div class="info-value">• Orientação profissional e vocacional</div>
+                            <div class="info-value">• Grupos de apoio para vestibulandos</div>
+                            <div class="info-value">• Workshops de técnicas de estudo</div>
+                            <div class="info-value">• Palestras em instituições de ensino</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="agenda">
+                    <div class="info-section">
+                        <h2 class="section-title">📅 Horários Disponíveis</h2>
+                        <p style="margin-bottom: 15px; color: var(--bege);">
+                            Selecione um horário para agendar sua consulta:
+                        </p>
+                        
+                        <h3 style="margin: 20px 0 10px 0; color: var(--dourado);">Segunda-feira (20/11)</h3>
+                        <div class="availability-grid">
+                            <div class="time-slot">08:00 - 09:00</div>
+                            <div class="time-slot">10:00 - 11:00</div>
+                            <div class="time-slot">14:00 - 15:00</div>
+                            <div class="time-slot">16:00 - 17:00</div>
+                            <div class="time-slot">18:00 - 19:00</div>
+                        </div>
+                        
+                        <h3 style="margin: 20px 0 10px 0; color: var(--dourado);">Terça-feira (21/11)</h3>
+                        <div class="availability-grid">
+                            <div class="time-slot">09:00 - 10:00</div>
+                            <div class="time-slot">11:00 - 12:00</div>
+                            <div class="time-slot">15:00 - 16:00</div>
+                            <div class="time-slot">17:00 - 18:00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="session-pricing">
+                        <div>
+                            <div class="price">R$ 120,00</div>
+                            <div class="price-note">por sessão de 50 minutos</div>
+                        </div>
+                        <button class="btn-primary">Confirmar Agendamento</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="avaliacoes">
+                    <div class="reviews-section">
+                        <div class="review">
+                            <div class="review-header">
+                                <div class="review-user">
+                                    <div class="user-avatar">M</div>
+                                    <div>
+                                        <div class="info-value">Maria Santos</div>
+                                        <div class="stars">★★★★★</div>
+                                    </div>
+                                </div>
+                                <div class="info-label">2 semanas atrás</div>
+                            </div>
+                            <div class="review-content">
+                                O Dr. Carlos me ajudou muito a lidar com minha ansiedade antes do ENEM. Suas técnicas de respiração e mindfulness foram essenciais para eu conseguir manter a calma durante a prova. Recomendo muito!
+                            </div>
+                        </div>
+                        
+                        <div class="review">
+                            <div class="review-header">
+                                <div class="review-user">
+                                    <div class="user-avatar">J</div>
+                                    <div>
+                                        <div class="info-value">João Pereira</div>
+                                        <div class="stars">★★★★★</div>
+                                    </div>
+                                </div>
+                                <div class="info-label">1 mês atrás</div>
+                            </div>
+                            <div class="review-content">
+                                Excelente profissional! Me auxiliou na organização dos estudos e no controle da ansiedade. As sessões foram muito produtivas e consegui melhorar meu rendimento nos simulados.
+                            </div>
+                        </div>
+                        
+                        <div class="review">
+                            <div class="review-header">
+                                <div class="review-user">
+                                    <div class="user-avatar">A</div>
+                                    <div>
+                                        <div class="info-value">Ana Costa</div>
+                                        <div class="stars">★★★★☆</div>
+                                    </div>
+                                </div>
+                                <div class="info-label">2 meses atrás</div>
+                            </div>
+                            <div class="review-content">
+                                Gostei muito das sessões com o Dr. Carlos. Ele é muito atencioso e as técnicas que aprendi me ajudaram a controlar melhor o nervosismo. Só não dei 5 estrelas porque gostaria que as sessões fossem um pouco mais longas.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sistema de abas
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remover classe active de todas as abas e conteúdos
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Adicionar classe active à aba e conteúdo selecionados
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Seleção de horários
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    timeSlots.forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Botão de agendar consulta
+            const agendarBtn = document.getElementById('agendarConsulta');
+            agendarBtn.addEventListener('click', function() {
+                // Navegar para a aba de agenda
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                document.querySelector('.tab[data-tab="agenda"]').classList.add('active');
+                document.getElementById('agenda').classList.add('active');
+                
+                // Scroll suave para a seção de agenda
+                document.getElementById('agenda').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

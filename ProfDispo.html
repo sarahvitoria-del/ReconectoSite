@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profissionais - Reconecto</title>
+    <style>
+        :root {
+            --preto: #0A0A0A;
+            --dourado: #D4AF37;
+            --branco: #F5F5F5;
+            --cinza: #404040;
+            --cinza-claro: #8a8a8a;
+            --bege: #F0E6D2;
+            --verde: #2E8B57;
+            --vermelho: #8B0000;
+            --fundo-card: rgba(64, 64, 64, 0.2);
+            --azul-psicologo: rgba(65, 105, 225, 0.1);
+            --borda-psicologo: #4169E1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cinza);
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .page-subtitle {
+            color: var(--bege);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .search-section {
+            background: var(--fundo-card);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--cinza-claro);
+        }
+        
+        .filter-select, .filter-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .search-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .results-count {
+            color: var(--cinza-claro);
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: var(--dourado);
+            color: var(--preto);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #E6C158;
+        }
+        
+        .professionals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .professional-card {
+            background: var(--fundo-card);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--cinza);
+            cursor: pointer;
+        }
+        
+        .professional-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--dourado);
+        }
+        
+        .professional-card.featured {
+            border: 2px solid var(--dourado);
+            position: relative;
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--dourado);
+            color: var(--preto);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .card-header {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid var(--cinza);
+        }
+        
+        .card-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--dourado);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--preto);
+            border: 2px solid var(--borda-psicologo);
+        }
+        
+        .card-info {
+            flex: 1;
+        }
+        
+        .card-name {
+            font-family: 'Playfair Display', serif;
+            color: var(--dourado);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .verified-badge {
+            color: var(--borda-psicologo);
+            font-size: 0.9rem;
+        }
+        
+        .card-title {
+            color: var(--borda-psicologo);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stars {
+            color: var(--dourado);
+        }
+        
+        .rating-value {
+            font-size: 0.9rem;
+        }
+        
+        .card-body {
+            padding: 15px 20px;
+        }
+        
+        .card-bio {
+            color: var(--bege);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .specialty {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--dourado);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+        
+        .card-footer {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: var(--dourado);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .pagination-btn {
+            background: var(--fundo-card);
+            border: 1px solid var(--cinza);
+            color: var(--branco);
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn.active {
+            background: var(--dourado);
+            color: var(--preto);
+            border-color: var(--dourado);
+        }
+        
+        .pagination-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-actions {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .professionals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Reconecto</div>
+            <div class="nav-buttons">
+                <a href="painel.html" class="nav-btn">Voltar para o Painel</a>
+                <a href="perfilprof.html" class="nav-btn">Meu Perfil</a>
+                <button class="nav-btn">Minha Conta</button>
+            </div>
+        </header>
+        
+        <main>
+            <h1 class="page-title">Encontre o Profissional Ideal</h1>
+            <p class="page-subtitle">Conecte-se com psicólogos especializados em ansiedade, estresse e desempenho acadêmico</p>
+            
+            <section class="search-section">
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Especialidade</label>
+                        <select class="filter-select">
+                            <option>Todas as especialidades</option>
+                            <option>Ansiedade</option>
+                            <option>Estresse Pré-vestibular</option>
+                            <option>TDAH</option>
+                            <option>Burnout</option>
+                            <option>Orientação Profissional</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Localização</label>
+                        <select class="filter-select">
+                            <option>Todas as localizações</option>
+                            <option>Online</option>
+                            <option>Curitiba - PR</option>
+                            <option>São Paulo - SP</option>
+                            <option>Rio de Janeiro - RJ</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Preço por sessão</label>
+                        <select class="filter-select">
+                            <option>Qualquer preço</option>
+                            <option>Até R$ 100</option>
+                            <option>R$ 100 - R$ 150</option>
+                            <option>R$ 150 - R$ 200</option>
+                            <option>Acima de R$ 200</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Disponibilidade</label>
+                        <select class="filter-select">
+                            <option>Qualquer horário</option>
+                            <option>Manhã</option>
+                            <option>Tarde</option>
+                            <option>Noite</option>
+                            <option>Finais de semana</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="search-actions">
+                    <div class="results-count">Mostrando 8 profissionais</div>
+                    <button class="btn-primary">Aplicar Filtros</button>
+                </div>
+            </section>
+            
+            <section class="professionals-grid">
+                <!-- Dr. Carlos Silva - Destacado e verificado -->
+                <div class="professional-card featured" onclick="window.location.href='perfilprof.html'">
+                    <div class="featured-badge">Destaque</div>
+                    <div class="card-header">
+                        <div class="card-avatar">CS</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dr. Carlos Silva <span class="verified-badge">✓</span></h3>
+                            <div class="card-title">Psicólogo Clínico</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★★</div>
+                                <div class="rating-value">4.9 (47)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Especialista em ansiedade e estresse pré-vestibular. Atendo há 8 anos focando no bem-estar emocional de estudantes.</p>
+                        <div class="specialties">
+                            <span class="specialty">Ansiedade</span>
+                            <span class="specialty">Estresse</span>
+                            <span class="specialty">TDAH</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 120/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dra. Ana Costa - Verificada -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">AC</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dra. Ana Costa <span class="verified-badge">✓</span></h3>
+                            <div class="card-title">Psicóloga Educacional</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★★</div>
+                                <div class="rating-value">4.8 (32)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Especializada em dificuldades de aprendizagem e orientação vocacional para adolescentes e jovens adultos.</p>
+                        <div class="specialties">
+                            <span class="specialty">Aprendizagem</span>
+                            <span class="specialty">Orientação</span>
+                            <span class="specialty">Adolescentes</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 140/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dr. Roberto Almeida - Verificado -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">RA</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dr. Roberto Almeida <span class="verified-badge">✓</span></h3>
+                            <div class="card-title">Psicólogo Clínico</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★☆</div>
+                                <div class="rating-value">4.6 (28)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Atendimento focado em terapia cognitivo-comportamental para ansiedade, depressão e desenvolvimento pessoal.</p>
+                        <div class="specialties">
+                            <span class="specialty">TCC</span>
+                            <span class="specialty">Ansiedade</span>
+                            <span class="specialty">Depressão</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 130/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dra. Mariana Santos -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">MS</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dra. Mariana Santos</h3>
+                            <div class="card-title">Psicóloga Organizacional</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★★</div>
+                                <div class="rating-value">4.7 (19)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Especialista em gestão de estresse, produtividade e equilíbrio entre vida pessoal e profissional.</p>
+                        <div class="specialties">
+                            <span class="specialty">Produtividade</span>
+                            <span class="specialty">Estresse</span>
+                            <span class="specialty">Equilíbrio</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 150/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dr. Fernando Lima - Verificado -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">FL</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dr. Fernando Lima <span class="verified-badge">✓</span></h3>
+                            <div class="card-title">Neuropsicólogo</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★★</div>
+                                <div class="rating-value">4.9 (41)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Avaliação e intervenção neuropsicológica para TDAH, dislexia e outras dificuldades de aprendizagem.</p>
+                        <div class="specialties">
+                            <span class="specialty">Neuropsicologia</span>
+                            <span class="specialty">TDAH</span>
+                            <span class="specialty">Dislexia</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 160/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dra. Juliana Pereira -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">JP</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dra. Juliana Pereira</h3>
+                            <div class="card-title">Psicóloga Clínica</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★☆</div>
+                                <div class="rating-value">4.5 (23)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Abordagem humanista com foco em autoconhecimento, desenvolvimento pessoal e inteligência emocional.</p>
+                        <div class="specialties">
+                            <span class="specialty">Humanista</span>
+                            <span class="specialty">Autoconhecimento</span>
+                            <span class="specialty">Emoções</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 110/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dr. Paulo Mendes - Verificado -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">PM</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dr. Paulo Mendes <span class="verified-badge">✓</span></h3>
+                            <div class="card-title">Psicoterapeuta</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★★</div>
+                                <div class="rating-value">4.8 (35)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Terapia breve focalizada em solução de problemas e desenvolvimento de habilidades sociais e emocionais.</p>
+                        <div class="specialties">
+                            <span class="specialty">Terapia Breve</span>
+                            <span class="specialty">Habilidades</span>
+                            <span class="specialty">Solução</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 135/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+                
+                <!-- Dra. Camila Rocha -->
+                <div class="professional-card" onclick="window.location.href='#'">
+                    <div class="card-header">
+                        <div class="card-avatar">CR</div>
+                        <div class="card-info">
+                            <h3 class="card-name">Dra. Camila Rocha</h3>
+                            <div class="card-title">Psicóloga Cognitiva</div>
+                            <div class="card-rating">
+                                <div class="stars">★★★★☆</div>
+                                <div class="rating-value">4.6 (17)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-bio">Especialista em reestruturação cognitiva para ansiedade, fobias e transtornos do pensamento.</p>
+                        <div class="specialties">
+                            <span class="specialty">Cognitiva</span>
+                            <span class="specialty">Fobias</span>
+                            <span class="specialty">Pensamento</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">R$ 125/sessão</div>
+                        <button class="btn-secondary">Ver Perfil</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="pagination">
+                <div class="pagination-btn active">1</div>
+                <div class="pagination-btn">2</div>
+                <div class="pagination-btn">3</div>
+                <div class="pagination-btn">→</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filtros de busca
+            const applyFiltersBtn = document.querySelector('.btn-primary');
+            applyFiltersBtn.addEventListener('click', function() {
+                alert('Filtros aplicados! Atualizando resultados...');
+                // Aqui iria a lógica para filtrar os profissionais
+            });
+            
+            // Navegação por paginação
+            const paginationBtns = document.querySelectorAll('.pagination-btn');
+            paginationBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!this.classList.contains('active')) {
+                        paginationBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        alert('Carregando página ' + this.textContent);
+                        // Aqui iria a lógica para carregar a página correspondente
+                    }
+                });
+            });
+            
+            // Navegação para perfis de profissionais
+            const professionalCards = document.querySelectorAll('.professional-card');
+            professionalCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // A navegação é feita via onclick no HTML
+                });
+            });
+        });
+    </script>
+</body>
+</html>
