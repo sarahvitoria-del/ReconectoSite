@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Módulo 4: Reconexão e Direcionamento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset e configurações básicas */
         * {
@@ -138,6 +139,13 @@
             border: 1px solid rgba(212, 175, 55, 0.4);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .infographic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
         }
         
         .infographic-card::before {
@@ -195,6 +203,293 @@
             color: #FFD700;
         }
         
+        /* Mapa de Significados */
+        .meanings-map-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .values-input-section {
+            background-color: rgba(40, 40, 40, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #D4AF37;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+        
+        .btn {
+            background: linear-gradient(90deg, #D4AF37, #FFD700);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .values-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+        
+        .value-item {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            position: relative;
+            min-width: 150px;
+            transition: all 0.3s ease;
+            cursor: move;
+        }
+        
+        .value-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .value-item.selected {
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .value-title {
+            font-weight: bold;
+            color: #D4AF37;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .value-description {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        .value-importance {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #D4AF37;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .map-visualization {
+            height: 400px;
+            background-color: rgba(10, 10, 10, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background-color: rgba(212, 175, 55, 0.7);
+            transform-origin: 0 0;
+            z-index: 1;
+        }
+        
+        /* Exercício de Projeção Fenomenológica */
+        .phenomenological-exercise {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .phenomenological-exercise {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .rules-creator, .ideal-scenario {
+            background-color: rgba(40, 40, 40, 0.8);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .rules-creator h3, .ideal-scenario h3 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+        
+        .rule-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .rule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rule-question {
+            color: #D4AF37;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .rule-answer {
+            color: #ccc;
+            font-style: italic;
+        }
+        
+        .scenario-visualization {
+            min-height: 200px;
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 8px;
+            border: 1px dashed rgba(212, 175, 55, 0.5);
+            padding: 20px;
+            margin-top: 20px;
+            color: #aaa;
+        }
+        
+        /* Modal para infográficos */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: #111;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 10px;
+            border: 2px solid #D4AF37;
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #D4AF37;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #FFD700;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: #D4AF37;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #FFD700;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        
+        .infographic-detail {
+            display: none;
+        }
+        
+        .infographic-detail.active {
+            display: block;
+        }
+        
+        .infographic-detail h3 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .infographic-detail p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .infographic-detail ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .infographic-detail li {
+            margin-bottom: 8px;
+        }
+        
         /* Responsividade */
         @media (max-width: 768px) {
             .module-title {
@@ -212,12 +507,69 @@
             .infographics, .levels {
                 grid-template-columns: 1fr;
             }
+            
+            .values-display {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Fundo com estrelas -->
     <div class="stars" id="stars"></div>
+    
+    <!-- Modal para infográficos -->
+    <div class="modal" id="infographicModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Detalhes do Infográfico</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Conteúdo dos infográficos será inserido aqui dinamicamente -->
+                <div id="infographic1" class="infographic-detail">
+                    <h3>Anatomia de um Construto Social</h3>
+                    <p>Os construtos sociais são estruturas criadas coletivamente que moldam nossa percepção da realidade. Na educação, eles se manifestam como:</p>
+                    <ul>
+                        <li><strong>Hierarquias de conhecimento:</strong> A ideia de que algumas disciplinas são mais importantes que outras</li>
+                        <li><strong>Métodos de avaliação:</strong> A crença de que provas e notas medem adequadamente o aprendizado</li>
+                        <li><strong>Estruturas temporais:</strong> A divisão rígida do tempo em aulas de 50 minutos, semestres, etc.</li>
+                        <li><strong>Espaços educacionais:</strong> A ideia de que o aprendizado acontece principalmente em salas de aula</li>
+                    </ul>
+                    <p>Este infográfico interativo permite desmontar esses construtos e visualizar como eles influenciam sua experiência educacional.</p>
+                </div>
+                
+                <div id="infographic2" class="infographic-detail">
+                    <h3>Fluxo da Redução Fenomenológica</h3>
+                    <p>A redução fenomenológica é o processo de suspender nossos julgamentos prévios para acessar a experiência pura. No contexto educacional, envolve:</p>
+                    <ol>
+                        <li><strong>Epoché:</strong> Suspender crenças sobre o que é "bom" ou "ruim" na educação</li>
+                        <li><strong>Redução Eidética:</strong> Identificar a essência (Eidos) da experiência de aprender</li>
+                        <li><strong>Intencionalidade:</strong> Reconhecer que toda consciência é consciência de algo</li>
+                        <li><strong>Retorno às Coisas Mesmas:</strong> Focar na experiência vivida, não nas teorias sobre ela</li>
+                    </ol>
+                    <p>Este fluxo interativo guia você através dessas etapas, ajudando a redescobrir seu desejo genuíno de aprender.</p>
+                </div>
+                
+                <div id="infographic3" class="infographic-detail">
+                    <h3>Mapa de Signos da Educação</h3>
+                    <p>Na semiótica, um signo é composto por:</p>
+                    <ul>
+                        <li><strong>Significante:</strong> A forma física do signo (ex: a palavra "professor", a imagem de uma sala de aula)</li>
+                        <li><strong>Significado:</strong> O conceito mental associado (ex: autoridade, transmissão de conhecimento)</li>
+                        <li><strong>Referente:</strong> O objeto real no mundo (ex: a pessoa que ensina)</li>
+                    </ul>
+                    <p>Na educação, diversos signos operam simultaneamente:</p>
+                    <ul>
+                        <li><strong>Diploma:</strong> Significa conquista, mas também pode significar conformidade</li>
+                        <li><strong>Nota:</strong> Significa desempenho, mas também pode significar valor pessoal</li>
+                        <li><strong>Livro didático:</strong> Significa conhecimento oficial, mas também pode significar conhecimento limitado</li>
+                    </ul>
+                    <p>Este mapa interativo permite explorar como esses signos influenciam sua percepção do aprendizado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="container">
         <!-- Cabeçalho do Módulo -->
@@ -229,14 +581,49 @@
         <!-- Mapa de Significados Pessoais -->
         <section class="section">
             <h2 class="section-title">Mapa de Significados Pessoais</h2>
-            <div class="section-content">
-                <div class="card">
+            <div class="meanings-map-container">
+                <div class="values-input-section">
                     <h3 class="card-title">Visualização Interativa dos Valores Descobertos</h3>
                     <p class="card-content">
                         Crie uma representação visual dinâmica dos valores essenciais que emergiram ao longo da sua jornada. 
                         Esta ferramenta interativa permite conectar, hierarquizar e explorar as relações entre seus valores 
                         fundamentais, criando um mapa pessoal único que orientará suas futuras decisões e direcionamentos.
                     </p>
+                    
+                    <div class="input-group">
+                        <label for="valueName">Nome do Valor:</label>
+                        <input type="text" id="valueName" placeholder="Ex: Autonomia, Criatividade, Sabedoria...">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="valueDescription">Descrição:</label>
+                        <input type="text" id="valueDescription" placeholder="Descreva o que este valor significa para você">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="valueImportance">Importância (1-10):</label>
+                        <input type="number" id="valueImportance" min="1" max="10" value="5">
+                    </div>
+                    
+                    <button class="btn" id="addValueBtn">
+                        <i class="fas fa-plus"></i> Adicionar Valor
+                    </button>
+                    
+                    <button class="btn" id="clearValuesBtn">
+                        <i class="fas fa-trash"></i> Limpar Valores
+                    </button>
+                    
+                    <div class="values-display" id="valuesDisplay">
+                        <!-- Valores serão adicionados aqui dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="map-visualization" id="mapVisualization">
+                    <!-- Mapa de conexões será gerado aqui -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; text-align: center;">
+                        <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>Adicione valores para visualizar suas conexões</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -244,15 +631,55 @@
         <!-- Exercício de Projeção Fenomenológica -->
         <section class="section">
             <h2 class="section-title">Exercício de Projeção Fenomenológica</h2>
-            <div class="section-content">
-                <div class="card">
-                    <h3 class="card-title">"Como seria estudar se você criasse as regras?"</h3>
-                    <p class="card-content">
-                        Imagine um cenário onde você tem total liberdade para definir como, quando, onde e o que estudar. 
+            <div class="phenomenological-exercise">
+                <div class="rules-creator">
+                    <h3>"Como seria estudar se você criasse as regras?"</h3>
+                    <p>Imagine um cenário onde você tem total liberdade para definir como, quando, onde e o que estudar. 
                         Através deste exercício fenomenológico, você explorará possibilidades educacionais sem as limitações 
                         dos construtos sociais atuais, permitindo que sua essência (Eidos) guie a criação de uma abordagem 
-                        de aprendizado verdadeiramente pessoal e significativa.
-                    </p>
+                        de aprendizado verdadeiramente pessoal e significativa.</p>
+                    
+                    <div class="rule-item">
+                        <div class="rule-question">O que você gostaria de aprender?</div>
+                        <div class="rule-answer" id="learnAnswer">Clique para editar</div>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-question">Como você gostaria de aprender?</div>
+                        <div class="rule-answer" id="howLearnAnswer">Clique para editar</div>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-question">Quando você gostaria de aprender?</div>
+                        <div class="rule-answer" id="whenLearnAnswer">Clique para editar</div>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-question">Onde você gostaria de aprender?</div>
+                        <div class="rule-answer" id="whereLearnAnswer">Clique para editar</div>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-question">Como você saberia que aprendeu?</div>
+                        <div class="rule-answer" id="knowLearnAnswer">Clique para editar</div>
+                    </div>
+                    
+                    <button class="btn" id="editRulesBtn">
+                        <i class="fas fa-edit"></i> Editar Regras
+                    </button>
+                </div>
+                
+                <div class="ideal-scenario">
+                    <h3>Seu Cenário Educacional Ideal</h3>
+                    <p>Com base nas regras que você definiu, visualize como seria um dia típico de aprendizado:</p>
+                    
+                    <div class="scenario-visualization" id="scenarioVisualization">
+                        Sua visualização aparecerá aqui depois que você definir suas regras.
+                    </div>
+                    
+                    <button class="btn" id="generateScenarioBtn" style="margin-top: 20px;">
+                        <i class="fas fa-eye"></i> Visualizar Cenário
+                    </button>
                 </div>
             </div>
         </section>
@@ -261,17 +688,26 @@
         <section class="section">
             <h2 class="section-title">Infográficos Interativos</h2>
             <div class="infographics">
-                <div class="infographic-card">
+                <div class="infographic-card" data-infographic="1">
                     <h3 class="infographic-title">Anatomia de um Construto Social</h3>
                     <p>Explore a estrutura, formação e influência dos construtos sociais em sua vida educacional.</p>
+                    <div style="margin-top: 15px;">
+                        <i class="fas fa-brain" style="font-size: 2rem; color: #D4AF37;"></i>
+                    </div>
                 </div>
-                <div class="infographic-card">
+                <div class="infographic-card" data-infographic="2">
                     <h3 class="infographic-title">Fluxo da Redução Fenomenológica</h3>
                     <p>Visualize o processo de suspensão do juízo e acesso à experiência pura da fenomenologia.</p>
+                    <div style="margin-top: 15px;">
+                        <i class="fas fa-stream" style="font-size: 2rem; color: #D4AF37;"></i>
+                    </div>
                 </div>
-                <div class="infographic-card">
+                <div class="infographic-card" data-infographic="3">
                     <h3 class="infographic-title">Mapa de Signos da Educação</h3>
                     <p>Navegue pelos símbolos, significados e significantes que compõem o universo educacional.</p>
+                    <div style="margin-top: 15px;">
+                        <i class="fas fa-map" style="font-size: 2rem; color: #D4AF37;"></i>
+                    </div>
                 </div>
             </div>
         </section>
@@ -346,7 +782,389 @@
         }
         
         // Inicializar quando a página carregar
-        window.addEventListener('load', createStars);
+        window.addEventListener('load', function() {
+            createStars();
+            initValuesMap();
+            initPhenomenologicalExercise();
+            initInfographics();
+        });
+        
+        // ========== MAPA DE SIGNIFICADOS PESSOAIS ==========
+        let values = [];
+        let selectedValue = null;
+        
+        function initValuesMap() {
+            const addValueBtn = document.getElementById('addValueBtn');
+            const clearValuesBtn = document.getElementById('clearValuesBtn');
+            const valuesDisplay = document.getElementById('valuesDisplay');
+            const mapVisualization = document.getElementById('mapVisualization');
+            
+            // Carregar valores salvos no localStorage
+            loadValuesFromStorage();
+            
+            // Adicionar valor
+            addValueBtn.addEventListener('click', function() {
+                const nameInput = document.getElementById('valueName');
+                const descInput = document.getElementById('valueDescription');
+                const importanceInput = document.getElementById('valueImportance');
+                
+                if (!nameInput.value.trim()) {
+                    alert('Por favor, digite um nome para o valor.');
+                    return;
+                }
+                
+                const newValue = {
+                    id: Date.now(),
+                    name: nameInput.value.trim(),
+                    description: descInput.value.trim(),
+                    importance: parseInt(importanceInput.value),
+                    x: Math.random() * 80 + 10, // Posição aleatória no mapa
+                    y: Math.random() * 80 + 10
+                };
+                
+                values.push(newValue);
+                saveValuesToStorage();
+                renderValues();
+                renderMap();
+                
+                // Limpar campos
+                nameInput.value = '';
+                descInput.value = '';
+                importanceInput.value = '5';
+            });
+            
+            // Limpar valores
+            clearValuesBtn.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja remover todos os valores?')) {
+                    values = [];
+                    saveValuesToStorage();
+                    renderValues();
+                    renderMap();
+                }
+            });
+            
+            // Renderizar valores
+            function renderValues() {
+                valuesDisplay.innerHTML = '';
+                
+                if (values.length === 0) {
+                    valuesDisplay.innerHTML = '<p style="color: #666; text-align: center; width: 100%;">Nenhum valor adicionado ainda. Adicione seu primeiro valor acima.</p>';
+                    return;
+                }
+                
+                // Ordenar por importância
+                const sortedValues = [...values].sort((a, b) => b.importance - a.importance);
+                
+                sortedValues.forEach(value => {
+                    const valueElement = document.createElement('div');
+                    valueElement.className = 'value-item';
+                    valueElement.dataset.id = value.id;
+                    
+                    if (selectedValue && selectedValue.id === value.id) {
+                        valueElement.classList.add('selected');
+                    }
+                    
+                    valueElement.innerHTML = `
+                        <div class="value-importance">${value.importance}</div>
+                        <div class="value-title">${value.name}</div>
+                        <div class="value-description">${value.description}</div>
+                    `;
+                    
+                    valueElement.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        selectValue(value.id);
+                    });
+                    
+                    // Permitir arrastar o valor
+                    valueElement.setAttribute('draggable', 'true');
+                    
+                    valueElement.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', value.id);
+                    });
+                    
+                    valuesDisplay.appendChild(valueElement);
+                });
+            }
+            
+            // Renderizar mapa
+            function renderMap() {
+                mapVisualization.innerHTML = '';
+                
+                if (values.length === 0) {
+                    mapVisualization.innerHTML = `
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; text-align: center;">
+                            <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <p>Adicione valores para visualizar suas conexões</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Adicionar valores ao mapa
+                values.forEach(value => {
+                    const valueElement = document.createElement('div');
+                    valueElement.className = 'value-item';
+                    valueElement.dataset.id = value.id;
+                    
+                    if (selectedValue && selectedValue.id === value.id) {
+                        valueElement.classList.add('selected');
+                    }
+                    
+                    valueElement.style.position = 'absolute';
+                    valueElement.style.left = `${value.x}%`;
+                    valueElement.style.top = `${value.y}%`;
+                    valueElement.style.transform = 'translate(-50%, -50%)';
+                    valueElement.style.zIndex = '2';
+                    
+                    valueElement.innerHTML = `
+                        <div class="value-importance">${value.importance}</div>
+                        <div class="value-title">${value.name}</div>
+                    `;
+                    
+                    valueElement.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        selectValue(value.id);
+                    });
+                    
+                    valueElement.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', value.id);
+                    });
+                    
+                    mapVisualization.appendChild(valueElement);
+                });
+                
+                // Criar conexões entre valores relacionados
+                if (values.length > 1) {
+                    for (let i = 0; i < values.length; i++) {
+                        for (let j = i + 1; j < values.length; j++) {
+                            // Conectar valores com importância similar
+                            if (Math.abs(values[i].importance - values[j].importance) <= 3) {
+                                createConnection(values[i], values[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Criar conexão entre dois valores
+            function createConnection(value1, value2) {
+                const x1 = value1.x;
+                const y1 = value1.y;
+                const x2 = value2.x;
+                const y2 = value2.y;
+                
+                // Calcular distância e ângulo
+                const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                
+                // Criar linha de conexão
+                const connection = document.createElement('div');
+                connection.className = 'connection-line';
+                connection.style.width = `${distance}%`;
+                connection.style.left = `${x1}%`;
+                connection.style.top = `${y1}%`;
+                connection.style.transform = `rotate(${angle}deg)`;
+                
+                // Opacidade baseada na similaridade de importância
+                const importanceDiff = Math.abs(value1.importance - value2.importance);
+                const opacity = 1 - (importanceDiff / 10);
+                connection.style.opacity = opacity;
+                
+                mapVisualization.appendChild(connection);
+            }
+            
+            // Selecionar valor
+            function selectValue(id) {
+                selectedValue = values.find(v => v.id === id);
+                renderValues();
+                renderMap();
+            }
+            
+            // Permitir soltar valores no mapa
+            mapVisualization.addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+            
+            mapVisualization.addEventListener('drop', function(e) {
+                e.preventDefault();
+                const valueId = parseInt(e.dataTransfer.getData('text/plain'));
+                const value = values.find(v => v.id === valueId);
+                
+                if (value) {
+                    // Calcular posição relativa
+                    const rect = mapVisualization.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    
+                    value.x = Math.max(5, Math.min(95, x));
+                    value.y = Math.max(5, Math.min(95, y));
+                    
+                    saveValuesToStorage();
+                    renderMap();
+                }
+            });
+            
+            // Carregar valores do localStorage
+            function loadValuesFromStorage() {
+                const savedValues = localStorage.getItem('personalValues');
+                if (savedValues) {
+                    values = JSON.parse(savedValues);
+                    renderValues();
+                    renderMap();
+                }
+            }
+            
+            // Salvar valores no localStorage
+            function saveValuesToStorage() {
+                localStorage.setItem('personalValues', JSON.stringify(values));
+            }
+        }
+        
+        // ========== EXERCÍCIO DE PROJEÇÃO FENOMENOLÓGICA ==========
+        function initPhenomenologicalExercise() {
+            const editRulesBtn = document.getElementById('editRulesBtn');
+            const generateScenarioBtn = document.getElementById('generateScenarioBtn');
+            const answerElements = document.querySelectorAll('.rule-answer');
+            const scenarioVisualization = document.getElementById('scenarioVisualization');
+            
+            // Carregar respostas salvas
+            loadAnswersFromStorage();
+            
+            // Editar regras
+            editRulesBtn.addEventListener('click', function() {
+                const answers = {};
+                
+                answerElements.forEach(el => {
+                    const id = el.id;
+                    const currentValue = el.textContent === 'Clique para editar' ? '' : el.textContent;
+                    const question = el.previousElementSibling.textContent;
+                    
+                    const newValue = prompt(`${question}\n\nDigite sua resposta:`, currentValue);
+                    
+                    if (newValue !== null) {
+                        el.textContent = newValue.trim() || 'Clique para editar';
+                        answers[id] = el.textContent;
+                    }
+                });
+                
+                saveAnswersToStorage();
+            });
+            
+            // Gerar cenário
+            generateScenarioBtn.addEventListener('click', function() {
+                const answers = {};
+                answerElements.forEach(el => {
+                    answers[el.id] = el.textContent;
+                });
+                
+                // Verificar se todas as respostas foram preenchidas
+                const hasEmptyAnswers = Array.from(answerElements).some(el => 
+                    el.textContent === 'Clique para editar'
+                );
+                
+                if (hasEmptyAnswers) {
+                    scenarioVisualization.innerHTML = `
+                        <div style="color: #D4AF37; text-align: center;">
+                            <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                            <p>Complete todas as regras antes de visualizar o cenário.</p>
+                            <p>Clique no botão "Editar Regras" para preencher suas respostas.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Gerar cenário baseado nas respostas
+                const scenario = `
+                    <h4 style="color: #FFD700; margin-bottom: 15px;">Seu Dia Ideal de Aprendizado</h4>
+                    <p>Em seu cenário educacional ideal, você <strong>${answers.learnAnswer.toLowerCase()}</strong>.</p>
+                    <p>Você aprende <strong>${answers.howLearnAnswer.toLowerCase()}</strong>, nos momentos em que <strong>${answers.whenLearnAnswer.toLowerCase()}</strong>.</p>
+                    <p>Seu ambiente de aprendizado preferido é <strong>${answers.whereLearnAnswer.toLowerCase()}</strong>.</p>
+                    <p>Você sabe que aprendeu quando <strong>${answers.knowLearnAnswer.toLowerCase()}</strong>.</p>
+                    
+                    <div style="margin-top: 25px; padding: 15px; background-color: rgba(212, 175, 55, 0.1); border-radius: 8px;">
+                        <h5 style="color: #D4AF37; margin-bottom: 10px;">Reflexão Fenomenológica:</h5>
+                        <p>Este exercício revela como sua <em>essência educacional (Eidos)</em> se manifesta quando liberta dos construtos sociais convencionais. Observe como suas respostas refletem seus valores pessoais mais profundos.</p>
+                    </div>
+                `;
+                
+                scenarioVisualization.innerHTML = scenario;
+                
+                // Salvar cenário gerado
+                localStorage.setItem('educationalScenario', scenario);
+            });
+            
+            // Carregar respostas do localStorage
+            function loadAnswersFromStorage() {
+                const savedAnswers = localStorage.getItem('phenomenologicalAnswers');
+                if (savedAnswers) {
+                    const answers = JSON.parse(savedAnswers);
+                    answerElements.forEach(el => {
+                        if (answers[el.id] && answers[el.id] !== 'Clique para editar') {
+                            el.textContent = answers[el.id];
+                        }
+                    });
+                }
+            }
+            
+            // Salvar respostas no localStorage
+            function saveAnswersToStorage() {
+                const answers = {};
+                answerElements.forEach(el => {
+                    answers[el.id] = el.textContent;
+                });
+                localStorage.setItem('phenomenologicalAnswers', JSON.stringify(answers));
+            }
+        }
+        
+        // ========== INFOGRÁFICOS INTERATIVOS ==========
+        function initInfographics() {
+            const infographicCards = document.querySelectorAll('.infographic-card');
+            const modal = document.getElementById('infographicModal');
+            const closeModal = document.getElementById('closeModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const infographicDetails = document.querySelectorAll('.infographic-detail');
+            
+            // Abrir modal ao clicar em um infográfico
+            infographicCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const infographicId = this.dataset.infographic;
+                    
+                    // Atualizar título do modal
+                    const title = this.querySelector('.infographic-title').textContent;
+                    modalTitle.textContent = title;
+                    
+                    // Mostrar o infográfico correspondente
+                    infographicDetails.forEach(detail => {
+                        detail.classList.remove('active');
+                        if (detail.id === `infographic${infographicId}`) {
+                            detail.classList.add('active');
+                        }
+                    });
+                    
+                    // Mostrar modal
+                    modal.classList.add('active');
+                });
+            });
+            
+            // Fechar modal
+            closeModal.addEventListener('click', function() {
+                modal.classList.remove('active');
+            });
+            
+            // Fechar modal ao clicar fora
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Fechar modal com tecla ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    modal.classList.remove('active');
+                }
+            });
+        }
     </script>
 </body>
 </html>
