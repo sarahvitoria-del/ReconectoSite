@@ -435,6 +435,15 @@
             font-style: italic;
         }
 
+        /* Estilos para a análise de signos */
+        #analiseContainer div[style*="font-size: 0.85rem"] {
+            margin-top: 5px;
+        }
+
+        #analiseContainer strong {
+            color: var(--dourado-medio);
+        }
+
         /* ===== RESPONSIVIDADE ===== */
         @media (max-width: 1024px) {
             .sidebar {
@@ -619,7 +628,7 @@
                 <p class="note">Isso permite identificar o <strong>custo real</strong> dos construtos em sua jornada.</p>
             </article>
 
-                        <!-- Seção 5: Desmontagem de Signos -->
+            <!-- Seção 5: Desmontagem de Signos -->
             <article id="desmontagem" class="section-block">
                 <h3 class="section-title gold-accent">5. Exercício 3: Desmontagem de Signos</h3>
                 <div class="metaphor">
@@ -712,9 +721,10 @@
             </article>
 
         </section>
+    </main>
 
-         <script>
-            // Exercício 5: Desmontagem de Signos
+    <script>
+        // Exercício 5: Desmontagem de Signos
         const signosData = {
             'prova': {
                 antes: "Medo, ansiedade, avaliação, julgamento, pressão do tempo, prova de valor",
@@ -748,11 +758,14 @@
             const container = document.getElementById('analiseContainer');
             
             let signoEscolhido = '';
+            let signoTexto = '';
             
             if (custom.value.trim() !== '') {
                 signoEscolhido = custom.value.trim().toLowerCase();
+                signoTexto = custom.value.trim();
             } else if (select.value !== '') {
                 signoEscolhido = select.value;
+                signoTexto = select.options[select.selectedIndex].text;
             } else {
                 alert('Por favor, selecione ou escreva um signo para analisar.');
                 return;
@@ -766,33 +779,75 @@
                 document.getElementById('antesEpoché').textContent = signosData[signoEscolhido].antes;
                 document.getElementById('aposEpoché').textContent = signosData[signoEscolhido].depois;
             } else {
-                // Para signos personalizados
-                const reacoes = [
-                    "Ansiedade, pressão social, comparação com outros",
-                    "Expectativa, desejo de aprovação, medo do julgamento",
-                    "Senso de obrigação, busca por significado, necessidade de validação"
-                ];
-                
-                const observacoes = [
-                    "O signo como pura forma: sons, letras, imagens mentais",
-                    "Sensações corporais puras sem atribuição de significado",
-                    "Contexto físico e temporal específico"
-                ];
-                
-                document.getElementById('antesEpoché').textContent = 
-                    `Observe suas reações automáticas: ${reacoes[Math.floor(Math.random() * reacoes.length)]}`;
-                
-                document.getElementById('aposEpoché').textContent = 
-                    `Após aplicar a Epoché, observe apenas: ${observacoes[Math.floor(Math.random() * observacoes.length)]}`;
+                // Para signos personalizados - ANÁLISE DINÂMICA
+                const analise = analisarSignoPersonalizado(signoTexto);
+                document.getElementById('antesEpoché').innerHTML = analise.antes;
+                document.getElementById('aposEpoché').innerHTML = analise.depois;
             }
             
             // Rolagem suave para a análise
             container.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
             // Registrar no console para fins educacionais
-            console.log(`🔍 Análise Fenomenológica do signo: "${signoEscolhido}"`);
+            console.log(`🔍 Análise Fenomenológica do signo: "${signoTexto}"`);
             console.log(`📝 Antes da Epoché: ${document.getElementById('antesEpoché').textContent}`);
             console.log(`🎯 Após a Epoché: ${document.getElementById('aposEpoché').textContent}`);
+        }
+
+        // NOVA FUNÇÃO: Analisar signos personalizados dinamicamente
+        function analisarSignoPersonalizado(signo) {
+            // Categorias de análise baseadas na semiótica fenomenológica
+            const categoriasAntes = {
+                emocional: ["Ansiedade", "Medo", "Expectativa", "Pressão", "Desejo de validação", "Comparação"],
+                social: ["Julgamento dos outros", "Normas sociais", "Expectativas externas", "Papéis sociais"],
+                temporal: ["Preocupação com futuro", "Memórias passadas", "Pressão do tempo", "Urgência"],
+                valorativo: ["Bom/Ruim", "Certo/Errado", "Sucesso/Fracasso", "Mérito/Culpa"]
+            };
+            
+            const categoriasDepois = {
+                significante: ["Sequência de letras: '" + signo + "'", "Sons ao pronunciar", "Forma visual no papel/tela"],
+                fenomenológico: ["Sensações corporais puras", "Imagens mentais sem narrativa", "Percepções diretas"],
+                contextual: ["Situação específica onde aparece", "Elementos materiais envolvidos", "Tempo e espaço concretos"],
+                experiencial: ["Ação física envolvida", "Movimentos corporais", "Interação sensorial"]
+            };
+            
+            // Gerar análise personalizada
+            const antesItems = [];
+            const depoisItems = [];
+            
+            // Selecionar 2-3 itens de cada categoria "antes"
+            Object.keys(categoriasAntes).forEach(categoria => {
+                const items = categoriasAntes[categoria];
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                if (Math.random() > 0.3) { // 70% de chance de incluir cada categoria
+                    antesItems.push(`• <strong>${categoria}:</strong> ${randomItem}`);
+                }
+            });
+            
+            // Selecionar 2-3 itens de cada categoria "depois"
+            Object.keys(categoriasDepois).forEach(categoria => {
+                const items = categoriasDepois[categoria];
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                if (Math.random() > 0.3) { // 70% de chance de incluir cada categoria
+                    depoisItems.push(`• <strong>${categoria}:</strong> ${randomItem}`);
+                }
+            });
+            
+            // Garantir pelo menos 2 itens em cada
+            if (antesItems.length < 2) {
+                antesItems.push("• <strong>valorativo:</strong> Julgamento automático de valor");
+                antesItems.push("• <strong>emocional:</strong> Reação afetiva imediata");
+            }
+            
+            if (depoisItems.length < 2) {
+                depoisItems.push("• <strong>significante:</strong> Forma pura do signo: '" + signo + "'");
+                depoisItems.push("• <strong>fenomenológico:</strong> Experiência sensorial imediata");
+            }
+            
+            return {
+                antes: `<div style="font-size: 0.85rem; line-height: 1.5;">${antesItems.join('<br>')}</div>`,
+                depois: `<div style="font-size: 0.85rem; line-height: 1.5;">${depoisItems.join('<br>')}</div>`
+            };
         }
 
         // Tornar os inputs interativos
@@ -807,7 +862,7 @@
                 document.getElementById('signoSelect').value = '';
             }
         });
-   
+
         // Criar estrelas no fundo
         function createStars() {
             const starsContainer = document.getElementById('starsBackground');
@@ -875,10 +930,5 @@
             observer.observe(diagnosticSection);
         }
     </script>
-    </main>
-
 </body>
-
 </html>
-
-
