@@ -619,9 +619,194 @@
                 <p class="note">Isso permite identificar o <strong>custo real</strong> dos construtos em sua jornada.</p>
             </article>
 
+                        <!-- Seção 5: Desmontagem de Signos -->
+            <article id="desmontagem" class="section-block">
+                <h3 class="section-title gold-accent">5. Exercício 3: Desmontagem de Signos</h3>
+                <div class="metaphor">
+                    <span class="icon">🔍</span> 
+                    <strong>Fenomenologia + Semiótica: Observando os Signos</strong>
+                    <br>
+                    Todo conceito educativo é um **signo** composto de significante (forma) e significado (conceito). A Epoché nos permite desmontá-los para observar suas partes constitutivas.
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Triângulo Semiótico Fenomenológico</p>
+                    <div style="display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+                        <div style="text-align: center; padding: 15px; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; background: rgba(212, 175, 55, 0.05);">
+                            <div style="color: var(--dourado); font-weight: bold; margin-bottom: 10px;">Significante</div>
+                            <div style="font-size: 0.9rem; color: var(--bege); margin-bottom: 15px;">(Forma: "Prova", "Nota", "Livro")</div>
+                            <div style="border-bottom: 1px dashed rgba(212, 175, 55, 0.5); margin: 10px 0;"></div>
+                            <div style="color: var(--dourado); font-weight: bold; margin: 15px 0 10px;">Significado</div>
+                            <div style="font-size: 0.9rem; color: var(--bege); margin-bottom: 15px;">(Conceito: Avaliação, Valor, Conhecimento)</div>
+                            <div style="border-bottom: 1px dashed rgba(212, 175, 55, 0.5); margin: 10px 0;"></div>
+                            <div style="color: var(--dourado); font-weight: bold; margin: 15px 0 10px;">Referente Fenomenológico</div>
+                            <div style="font-size: 0.9rem; color: var(--bege);">(Experiência Pura: O que existe antes dos rótulos)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Exercício Prático: Análise de um Signo Educacional</h4>
+                
+                <div class="steps">
+                    <li><strong>Selecione um signo:</strong> Escolha um termo educacional que cause reação emocional (ex: "Prova", "Nota", "Professor", "Fracasso")</li>
+                    <li><strong>Aplique a Epoché:</strong> Coloque entre parênteses todos os significados atribuídos a esse termo</li>
+                    <li><strong>Desmonte o signo:</strong>
+                        <div style="margin: 10px 0 10px 20px; padding: 10px; background: rgba(212, 175, 55, 0.05); border-radius: 6px;">
+                            <p style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Significante:</strong> Qual é a forma física? (palavra escrita, som, imagem)</p>
+                            <p style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Significado:</strong> Quais conceitos estão associados? Liste 3-5</p>
+                            <p style="font-size: 0.9rem;"><strong>Referente Fenomenológico:</strong> Qual é a experiência crua por trás? (cores, formas, sensações corporais puras)</p>
+                        </div>
+                    </li>
+                    <li><strong>Observação Pós-Desmontagem:</strong> Como você vê esse conceito agora? A reação emocional mudou?</li>
+                </div>
+
+                <!-- Exercício Interativo -->
+                <div style="margin-top: 25px; padding: 20px; background: rgba(10, 10, 10, 0.5); border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.1);">
+                    <h4 style="color: var(--dourado); margin-bottom: 15px;">🔄 Desmontagem Interativa</h4>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; color: var(--bege); margin-bottom: 8px; font-weight: 600;">Escolha um signo para desmontar:</label>
+                        <select id="signoSelect" style="width: 100%; padding: 10px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 6px; color: var(--bege);">
+                            <option value="">Selecione um signo...</option>
+                            <option value="prova">Prova</option>
+                            <option value="nota">Nota</option>
+                            <option value="aprender">Aprender</option>
+                            <option value="fracasso">Fracasso</option>
+                            <option value="sucesso">Sucesso</option>
+                            <option value="inteligencia">Inteligência</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; color: var(--bege); margin-bottom: 8px; font-weight: 600;">Ou escreva seu próprio signo:</label>
+                        <input type="text" id="signoCustom" placeholder="Ex: 'Trabalho em grupo', 'TCC', 'Boa nota'..." 
+                               style="width: 100%; padding: 10px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 6px; color: var(--bege);">
+                    </div>
+                    
+                    <div style="margin-top: 20px; display: none;" id="analiseContainer">
+                        <h5 style="color: var(--dourado-medio); margin-bottom: 10px;">Análise Fenomenológica do Signo</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                                <div style="color: var(--dourado); font-weight: bold; margin-bottom: 8px;">Antes da Epoché</div>
+                                <div id="antesEpoché" style="font-size: 0.9rem; color: var(--bege);">
+                                    (Clique em "Analisar" para começar)
+                                </div>
+                            </div>
+                            <div style="background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                                <div style="color: var(--dourado); font-weight: bold; margin-bottom: 8px;">Após a Epoché</div>
+                                <div id="aposEpoché" style="font-size: 0.9rem; color: var(--bege);">
+                                    (Observação fenomenológica pura)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="action-button" onclick="analisarSigno()" style="margin-top: 15px;">
+                        <span class="icon">🔧</span> Desmontar Signo
+                    </button>
+                </div>
+
+                <p class="note" style="margin-top: 20px;">
+                    <strong>Insight Fenomenológico:</strong> Ao desmontar signos, você percebe que muitos "problemas" são na verdade relações com significantes, não com a realidade fenomenológica pura.
+                </p>
+            </article>
+
         </section>
     </main>
 
+            // Exercício 5: Desmontagem de Signos
+        const signosData = {
+            'prova': {
+                antes: "Medo, ansiedade, avaliação, julgamento, pressão do tempo, prova de valor",
+                depois: "Folha de papel com perguntas, ambiente específico, tempo limitado, caneta e papel como ferramentas, respostas escritas"
+            },
+            'nota': {
+                antes: "Validação, sucesso/fracasso, comparação, mérito, futuro, recompensa",
+                depois: "Número ou letra em um papel, feedback quantificado, informação sobre acertos/erros"
+            },
+            'aprender': {
+                antes: "Processo difícil, obrigação, acumulação de conhecimento, preparação para o futuro",
+                depois: "Mudança neurológica, novas conexões, curiosidade natural, descoberta, experiência"
+            },
+            'fracasso': {
+                antes: "Vergonha, derrota, perda, inadequação, fim do caminho",
+                depois: "Resultado específico, informação sobre o que não funcionou, oportunidade de ajuste"
+            },
+            'sucesso': {
+                antes: "Felicidade, validação, conclusão, prêmio, reconhecimento",
+                depois: "Resultado específico, meta alcançada, ciclo completado"
+            },
+            'inteligencia': {
+                antes: "Dote inato, valor pessoal, capacidade fixa, comparação, hierarquia",
+                depois: "Habilidade de resolver problemas, flexibilidade cognitiva, adaptação ao contexto"
+            }
+        };
+
+        function analisarSigno() {
+            const select = document.getElementById('signoSelect');
+            const custom = document.getElementById('signoCustom');
+            const container = document.getElementById('analiseContainer');
+            
+            let signoEscolhido = '';
+            
+            if (custom.value.trim() !== '') {
+                signoEscolhido = custom.value.trim().toLowerCase();
+            } else if (select.value !== '') {
+                signoEscolhido = select.value;
+            } else {
+                alert('Por favor, selecione ou escreva um signo para analisar.');
+                return;
+            }
+            
+            // Mostrar container de análise
+            container.style.display = 'block';
+            
+            // Dados para signos predefinidos
+            if (signosData[signoEscolhido]) {
+                document.getElementById('antesEpoché').textContent = signosData[signoEscolhido].antes;
+                document.getElementById('aposEpoché').textContent = signosData[signoEscolhido].depois;
+            } else {
+                // Para signos personalizados
+                const reacoes = [
+                    "Ansiedade, pressão social, comparação com outros",
+                    "Expectativa, desejo de aprovação, medo do julgamento",
+                    "Senso de obrigação, busca por significado, necessidade de validação"
+                ];
+                
+                const observacoes = [
+                    "O signo como pura forma: sons, letras, imagens mentais",
+                    "Sensações corporais puras sem atribuição de significado",
+                    "Contexto físico e temporal específico"
+                ];
+                
+                document.getElementById('antesEpoché').textContent = 
+                    `Observe suas reações automáticas: ${reacoes[Math.floor(Math.random() * reacoes.length)]}`;
+                
+                document.getElementById('aposEpoché').textContent = 
+                    `Após aplicar a Epoché, observe apenas: ${observacoes[Math.floor(Math.random() * observacoes.length)]}`;
+            }
+            
+            // Rolagem suave para a análise
+            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Registrar no console para fins educacionais
+            console.log(`🔍 Análise Fenomenológica do signo: "${signoEscolhido}"`);
+            console.log(`📝 Antes da Epoché: ${document.getElementById('antesEpoché').textContent}`);
+            console.log(`🎯 Após a Epoché: ${document.getElementById('aposEpoché').textContent}`);
+        }
+
+        // Tornar os inputs interativos
+        document.getElementById('signoSelect').addEventListener('change', function() {
+            if (this.value !== '') {
+                document.getElementById('signoCustom').value = '';
+            }
+        });
+        
+        document.getElementById('signoCustom').addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                document.getElementById('signoSelect').value = '';
+            }
+        });
     <script>
         // Criar estrelas no fundo
         function createStars() {
@@ -691,4 +876,5 @@
         }
     </script>
 </body>
+
 </html>
