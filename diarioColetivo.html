@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário Coletivo | Eidética Coletiva</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Estrelas no fundo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #D4AF37;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #D4AF37;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #ddd;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navegação */
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: #D4AF37;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Layout principal */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Seções */
+        .section {
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            border-left: 4px solid #D4AF37;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #D4AF37;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+        }
+
+        /* Formulário de registro */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #D4AF37;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Tags */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tag-option {
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag-option:hover {
+            background-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .tag-option.selected {
+            background-color: #D4AF37;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .tag-option input {
+            display: none;
+        }
+
+        /* Botões */
+        .btn {
+            background: linear-gradient(145deg, #D4AF37, #FFD700);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        /* Cards de insights */
+        .insights-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .insight-card {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 3px solid #D4AF37;
+            transition: transform 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .insight-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .insight-date {
+            font-size: 0.85rem;
+            color: #D4AF37;
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .insight-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+
+        .insight-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .insight-content {
+            margin-bottom: 15px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .insight-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background-color: rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            color: #FFD700;
+        }
+
+        .insight-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Estatísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+
+        /* Linha do tempo */
+        .timeline-container {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #D4AF37;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #D4AF37;
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #D4AF37;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .timeline-content {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Selos */
+        .selos-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .selo {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .selo:hover {
+            border-color: #D4AF37;
+            transform: scale(1.05);
+        }
+
+        .selo-icon {
+            font-size: 1.8rem;
+            color: #FFD700;
+            margin-bottom: 8px;
+        }
+
+        .selo-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .selo-desc {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        /* Rodapé */
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Barra de rolagem personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFD700;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .stats-grid, .selos-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo com estrelas -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- Cabeçalho -->
+        <header>
+            <h1>Diário Coletivo</h1>
+            <p class="subtitle">Registro das descobertas, reflexões e momentos importantes da nossa comunidade</p>
+            
+            <div class="nav-links">
+                <a href="painel.html" class="nav-btn">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a href="DiárioFenomenológico.html" class="nav-btn">
+                    <i class="fas fa-book"></i> Meu Diário
+                </a>
+                <a href="forum.html" class="nav-btn">
+                    <i class="fas fa-comments"></i> Fórum
+                </a>
+                <a href="#" class="nav-btn">
+                    <i class="fas fa-users"></i> Grupos
+                </a>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Conteúdo principal -->
+            <main>
+                <!-- Formulário de registro -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-pen-fancy"></i> Compartilhe uma Descoberta Coletiva</h2>
+                    <p>Registre um momento importante, uma reflexão compartilhada ou uma descoberta feita em conjunto pela comunidade.</p>
+                    
+                    <form id="insightForm">
+                        <div class="form-group">
+                            <label for="insightTitle">Título da Descoberta</label>
+                            <input type="text" id="insightTitle" class="form-control" placeholder="Ex: Nova forma de ver as avaliações">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="insightDescription">Descreva o que foi descoberto</label>
+                            <textarea id="insightDescription" class="form-control" placeholder="Conte sobre o que a comunidade descobriu juntos, como foi o processo e qual o significado dessa descoberta..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Discussão relacionada (opcional)</label>
+                            <input type="text" class="form-control" placeholder="Título da discussão no fórum">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Categorias</label>
+                            <div class="tags-container">
+                                <div class="tag-option" onclick="toggleTag(this)">
+                                    <input type="checkbox" id="tag1">
+                                    <i class="fas fa-eye"></i>
+                                    <span>Observação</span>
+                                </div>
+                                <div class="tag-option" onclick="toggleTag(this)">
+                                    <input type="checkbox" id="tag2">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Descoberta</span>
+                                </div>
+                                <div class="tag-option" onclick="toggleTag(this)">
+                                    <input type="checkbox" id="tag3">
+                                    <i class="fas fa-heart"></i>
+                                    <span>Reflexão</span>
+                                </div>
+                                <div class="tag-option" onclick="toggleTag(this)">
+                                    <input type="checkbox" id="tag4">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Mudança</span>
+                                </div>
+                                <div class="tag-option" onclick="toggleTag(this)">
+                                    <input type="checkbox" id="tag5">
+                                    <i class="fas fa-users"></i>
+                                    <span>Colaboração</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn" onclick="registrarInsight()">
+                            <i class="fas fa-share-alt"></i> Compartilhar com a Comunidade
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Descobertas coletivas recentes -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-lightbulb"></i> Descobertas Recentes da Comunidade</h2>
+                    
+                    <div class="insights-list">
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <div class="insight-date">16/10/2023 • 18:45</div>
+                                <div class="insight-author">
+                                    <i class="fas fa-users"></i>
+                                    <span>42 participantes</span>
+                                </div>
+                            </div>
+                            
+                            <h3 class="insight-title">Repensando o que é uma "nota perfeita"</h3>
+                            
+                            <div class="insight-content">
+                                Em uma discussão coletiva, percebemos que nossa ideia de "nota perfeita" vem mais da pressão social do que do aprendizado real. Juntos, chegamos à conclusão de que o processo de aprendizado é mais importante do que a nota final.
+                            </div>
+                            
+                            <div class="insight-tags">
+                                <span class="tag">Aprendizado</span>
+                                <span class="tag">Educação</span>
+                                <span class="tag">Colaboração</span>
+                            </div>
+                            
+                            <div class="insight-stats">
+                                <div class="stats-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>Discussão: "O que é uma nota perfeita?"</span>
+                                </div>
+                                <div class="stats-item">
+                                    <i class="fas fa-heart" style="color: #FFD700;"></i>
+                                    <span>28 apoios</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <div class="insight-date">15/10/2023 • 14:30</div>
+                                <div class="insight-author">
+                                    <i class="fas fa-users"></i>
+                                    <span>23 participantes</span>
+                                </div>
+                            </div>
+                            
+                            <h3 class="insight-title">Aprendendo a observar sem preconceitos</h3>
+                            
+                            <div class="insight-content">
+                                No desafio da semana, praticamos observar conceitos científicos sem nossas ideias prévias. Descobrimos que muitos de nossos conceitos sobre ciência vêm mais da escola do que da observação real.
+                            </div>
+                            
+                            <div class="insight-tags">
+                                <span class="tag">Ciência</span>
+                                <span class="tag">Observação</span>
+                                <span class="tag">Descoberta</span>
+                            </div>
+                            
+                            <div class="insight-stats">
+                                <div class="stats-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>Desafio: Observando a química</span>
+                                </div>
+                                <div class="stats-item">
+                                    <i class="fas fa-heart" style="color: #FFD700;"></i>
+                                    <span>35 apoios</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <div class="insight-date">14/10/2023 • 09:15</div>
+                                <div class="insight-author">
+                                    <i class="fas fa-users"></i>
+                                    <span>18 participantes</span>
+                                </div>
+                            </div>
+                            
+                            <h3 class="insight-title">Como nossas ideias sobre física foram formadas</h3>
+                            
+                            <div class="insight-content">
+                                Analisamos juntos como aprendemos conceitos de física na escola e como essas ideias se fixaram em nossa mente. Percebemos que muitas vezes aceitamos ideias sem questionar sua origem ou significado real.
+                            </div>
+                            
+                            <div class="insight-tags">
+                                <span class="tag">Física</span>
+                                <span class="tag">História</span>
+                                <span class="tag">Reflexão</span>
+                            </div>
+                            
+                            <div class="insight-stats">
+                                <div class="stats-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>Discussão: "Conceitos de física"</span>
+                                </div>
+                                <div class="stats-item">
+                                    <i class="fas fa-heart" style="color: #FFD700;"></i>
+                                    <span>42 apoios</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Estatísticas da comunidade -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-chart-bar"></i> Nossa Comunidade em Números</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">1,247</div>
+                            <div class="stat-label">Descobertas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">328</div>
+                            <div class="stat-label">Membros Ativos</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">42</div>
+                            <div class="stat-label">Discussões</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">18</div>
+                            <div class="stat-label">Desafios Concluídos</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Linha do tempo -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-stream"></i> Nossa Jornada</h2>
+                    <div class="timeline-container">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Outubro 2023</div>
+                            <div class="timeline-content">
+                                Começamos a repensar conceitos educacionais juntos. Primeiras conquistas coletivas registradas.
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Setembro 2023</div>
+                            <div class="timeline-content">
+                                Expansão das discussões sobre aprendizagem. Criamos nosso mapa de conexões entre ideias.
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Agosto 2023</div>
+                            <div class="timeline-content">
+                                Primeiros exercícios de observação coletiva. Este diário coletivo foi criado.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Conquistas -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-award"></i> Conquistas Coletivas</h2>
+                    <div class="selos-container">
+                        <div class="selo">
+                            <div class="selo-icon"><i class="fas fa-users"></i></div>
+                            <div class="selo-title">Primeira Observação Conjunta</div>
+                            <div class="selo-desc">15/08/2023</div>
+                        </div>
+                        <div class="selo">
+                            <div class="selo-icon"><i class="fas fa-lightbulb"></i></div>
+                            <div class="selo-title">Descoberta Compartilhada</div>
+                            <div class="selo-desc">100+ participações</div>
+                        </div>
+                        <div class="selo">
+                            <div class="selo-icon"><i class="fas fa-sync-alt"></i></div>
+                            <div class="selo-title">Mudança de Perspectiva</div>
+                            <div class="selo-desc">10/10/2023</div>
+                        </div>
+                        <div class="selo">
+                            <div class="selo-icon"><i class="fas fa-star"></i></div>
+                            <div class="selo-title">Comunidade Ativa</div>
+                            <div class="selo-desc">05/09/2023</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Acesso ao fórum -->
+                <section class="section">
+                    <h2 class="section-title"><i class="fas fa-comments"></i> Participe das Discussões</h2>
+                    <p>Junte-se às conversas e contribua para nossas descobertas coletivas.</p>
+                    <a href="forum.html" class="btn btn-large" style="margin-top: 15px;">
+                        <i class="fas fa-external-link-alt"></i> Ir para o Fórum
+                    </a>
+                </section>
+            </aside>
+        </div>
+
+        <footer>
+            <p>Comunidade de Aprendizagem Coletiva • Diário Coletivo • 2023</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: #777;">
+                Um espaço para compartilhar, aprender e crescer juntos
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Criar estrelas no fundo
+        function criarEstrelas() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Tamanho aleatório
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Posição aleatória
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Atraso na animação
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Função para alternar seleção de tags
+        function toggleTag(element) {
+            element.classList.toggle('selected');
+        }
+        
+        // Função para registrar uma nova descoberta
+        function registrarInsight() {
+            const title = document.getElementById('insightTitle').value;
+            const description = document.getElementById('insightDescription').value;
+            
+            if (!title.trim() || !description.trim()) {
+                alert('Por favor, preencha o título e a descrição da descoberta.');
+                return;
+            }
+            
+            // Aqui normalmente enviaríamos para um servidor
+            alert('Descoberta compartilhada com sucesso! Ela será revisada pela comunidade antes de aparecer na lista.');
+            
+            // Limpar formulário
+            document.getElementById('insightForm').reset();
+            
+            // Desmarcar todas as tags
+            document.querySelectorAll('.tag-option.selected').forEach(tag => {
+                tag.classList.remove('selected');
+            });
+        }
+        
+        // Adicionar funcionalidade de filtro por tag
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const tagText = this.textContent;
+                alert(`Mostrando descobertas sobre: ${tagText}`);
+            });
+        });
+
+        // Inicializar estrelas quando a página carregar
+        document.addEventListener('DOMContentLoaded', criarEstrelas);
+    </script>
+</body>
+</html>
