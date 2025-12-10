@@ -283,6 +283,7 @@
             min-width: 150px;
             transition: all 0.3s ease;
             cursor: move;
+            user-select: none;
         }
         
         .value-item:hover {
@@ -293,6 +294,11 @@
         .value-item.selected {
             border-color: #FFD700;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .value-item.dragging {
+            opacity: 0.7;
+            z-index: 1000;
         }
         
         .value-title {
@@ -333,14 +339,6 @@
             overflow: hidden;
         }
         
-        .connection-line {
-            position: absolute;
-            height: 2px;
-            background-color: rgba(212, 175, 55, 0.7);
-            transform-origin: 0 0;
-            z-index: 1;
-        }
-        
         /* Exercício de Projeção Fenomenológica */
         .phenomenological-exercise {
             display: grid;
@@ -372,6 +370,14 @@
             margin-bottom: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .rule-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 10px;
         }
         
         .rule-item:last-child {
@@ -387,6 +393,15 @@
         .rule-answer {
             color: #ccc;
             font-style: italic;
+            min-height: 24px;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        
+        .rule-answer.editing {
+            background-color: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
         
         .scenario-visualization {
@@ -619,12 +634,7 @@
                 </div>
                 
                 <div class="map-visualization" id="mapVisualization">
-                    <!-- Mapa de conexões será gerado aqui -->
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; text-align: center;">
-                        <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                        <p>Adicione valores para visualizar suas conexões</p>
-                    </div>
-                </div>
+                   
             </div>
         </section>
         
@@ -641,31 +651,31 @@
                     
                     <div class="rule-item">
                         <div class="rule-question">O que você gostaria de aprender?</div>
-                        <div class="rule-answer" id="learnAnswer">Clique para editar</div>
+                        <div class="rule-answer" id="learnAnswer" contenteditable="true">Clique para editar</div>
                     </div>
                     
                     <div class="rule-item">
                         <div class="rule-question">Como você gostaria de aprender?</div>
-                        <div class="rule-answer" id="howLearnAnswer">Clique para editar</div>
+                        <div class="rule-answer" id="howLearnAnswer" contenteditable="true">Clique para editar</div>
                     </div>
                     
                     <div class="rule-item">
                         <div class="rule-question">Quando você gostaria de aprender?</div>
-                        <div class="rule-answer" id="whenLearnAnswer">Clique para editar</div>
+                        <div class="rule-answer" id="whenLearnAnswer" contenteditable="true">Clique para editar</div>
                     </div>
                     
                     <div class="rule-item">
                         <div class="rule-question">Onde você gostaria de aprender?</div>
-                        <div class="rule-answer" id="whereLearnAnswer">Clique para editar</div>
+                        <div class="rule-answer" id="whereLearnAnswer" contenteditable="true">Clique para editar</div>
                     </div>
                     
                     <div class="rule-item">
                         <div class="rule-question">Como você saberia que aprendeu?</div>
-                        <div class="rule-answer" id="knowLearnAnswer">Clique para editar</div>
+                        <div class="rule-answer" id="knowLearnAnswer" contenteditable="true">Clique para editar</div>
                     </div>
                     
-                    <button class="btn" id="editRulesBtn">
-                        <i class="fas fa-edit"></i> Editar Regras
+                    <button class="btn" id="saveRulesBtn">
+                        <i class="fas fa-save"></i> Salvar Respostas
                     </button>
                 </div>
                 
@@ -792,6 +802,10 @@
         // ========== MAPA DE SIGNIFICADOS PESSOAIS ==========
         let values = [];
         let selectedValue = null;
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        let draggedValue = null;
         
         function initValuesMap() {
             const addValueBtn = document.getElementById('addValueBtn');
@@ -818,7 +832,7 @@
                     name: nameInput.value.trim(),
                     description: descInput.value.trim(),
                     importance: parseInt(importanceInput.value),
-                    x: Math.random() * 80 + 10, // Posição aleatória no mapa
+                    x: Math.random() * 80 + 10,
                     y: Math.random() * 80 + 10
                 };
                 
@@ -875,29 +889,133 @@
                         selectValue(value.id);
                     });
                     
-                    // Permitir arrastar o valor
-                    valueElement.setAttribute('draggable', 'true');
-                    
-                    valueElement.addEventListener('dragstart', function(e) {
-                        e.dataTransfer.setData('text/plain', value.id);
-                    });
+                    // Configurar arrastar
+                    setupDraggable(valueElement, value);
                     
                     valuesDisplay.appendChild(valueElement);
                 });
             }
             
+            // Configurar elemento arrastável
+            function setupDraggable(element, value) {
+                element.addEventListener('mousedown', startDrag);
+                element.addEventListener('touchstart', startDragTouch);
+                
+                function startDrag(e) {
+                    e.preventDefault();
+                    isDragging = true;
+                    draggedValue = value;
+                    element.classList.add('dragging');
+                    
+                    const rect = element.getBoundingClientRect();
+                    dragOffsetX = e.clientX - rect.left;
+                    dragOffsetY = e.clientY - rect.top;
+                    
+                    document.addEventListener('mousemove', drag);
+                    document.addEventListener('mouseup', stopDrag);
+                }
+                
+                function startDragTouch(e) {
+                    e.preventDefault();
+                    if (e.touches.length === 1) {
+                        isDragging = true;
+                        draggedValue = value;
+                        element.classList.add('dragging');
+                        
+                        const touch = e.touches[0];
+                        const rect = element.getBoundingClientRect();
+                        dragOffsetX = touch.clientX - rect.left;
+                        dragOffsetY = touch.clientY - rect.top;
+                        
+                        document.addEventListener('touchmove', dragTouch);
+                        document.addEventListener('touchend', stopDrag);
+                    }
+                }
+                
+                function drag(e) {
+                    if (!isDragging) return;
+                    
+                    element.style.position = 'fixed';
+                    element.style.left = `${e.clientX - dragOffsetX}px`;
+                    element.style.top = `${e.clientY - dragOffsetY}px`;
+                    element.style.zIndex = '1000';
+                }
+                
+                function dragTouch(e) {
+                    if (!isDragging || e.touches.length !== 1) return;
+                    
+                    const touch = e.touches[0];
+                    element.style.position = 'fixed';
+                    element.style.left = `${touch.clientX - dragOffsetX}px`;
+                    element.style.top = `${touch.clientY - dragOffsetY}px`;
+                    element.style.zIndex = '1000';
+                }
+                
+                function stopDrag(e) {
+                    if (!isDragging) return;
+                    
+                    isDragging = false;
+                    element.classList.remove('dragging');
+                    
+                    // Verificar se foi solto no mapa
+                    const mapRect = mapVisualization.getBoundingClientRect();
+                    const elementRect = element.getBoundingClientRect();
+                    
+                    if (elementRect.left < mapRect.right && 
+                        elementRect.right > mapRect.left &&
+                        elementRect.top < mapRect.bottom &&
+                        elementRect.bottom > mapRect.top) {
+                        
+                        // Solto no mapa - calcular posição relativa
+                        const x = ((elementRect.left + elementRect.width/2 - mapRect.left) / mapRect.width) * 100;
+                        const y = ((elementRect.top + elementRect.height/2 - mapRect.top) / mapRect.height) * 100;
+                        
+                        draggedValue.x = Math.max(5, Math.min(95, x));
+                        draggedValue.y = Math.max(5, Math.min(95, y));
+                        
+                        saveValuesToStorage();
+                        renderMap();
+                    }
+                    
+                    // Resetar estilo
+                    element.style.position = '';
+                    element.style.left = '';
+                    element.style.top = '';
+                    element.style.zIndex = '';
+                    
+                    document.removeEventListener('mousemove', drag);
+                    document.removeEventListener('mouseup', stopDrag);
+                    document.removeEventListener('touchmove', dragTouch);
+                    document.removeEventListener('touchend', stopDrag);
+                }
+            }
+            
             // Renderizar mapa
             function renderMap() {
-                mapVisualization.innerHTML = '';
+                // Limpar valores antigos do mapa
+                const oldValues = mapVisualization.querySelectorAll('.value-item');
+                oldValues.forEach(val => {
+                    if (!val.classList.contains('default-message')) {
+                        val.remove();
+                    }
+                });
                 
                 if (values.length === 0) {
-                    mapVisualization.innerHTML = `
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; text-align: center;">
-                            <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                            <p>Adicione valores para visualizar suas conexões</p>
-                        </div>
-                    `;
+                    if (!mapVisualization.querySelector('.default-message')) {
+                        mapVisualization.innerHTML = `
+                            <div class="default-message" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; text-align: center;">
+                                <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                <p>Adicione valores para visualizar suas conexões</p>
+                            </div>
+                        `;
+                    }
                     return;
+                }
+                
+                // Remover mensagem padrão se existir
+                const defaultMessage = mapVisualization.querySelector('.default-message');
+                if (defaultMessage) {
+                    defaultMessage.remove();
                 }
                 
                 // Adicionar valores ao mapa
@@ -926,51 +1044,11 @@
                         selectValue(value.id);
                     });
                     
-                    valueElement.addEventListener('dragstart', function(e) {
-                        e.dataTransfer.setData('text/plain', value.id);
-                    });
+                    // Configurar arrastar no mapa também
+                    setupDraggable(valueElement, value);
                     
                     mapVisualization.appendChild(valueElement);
                 });
-                
-                // Criar conexões entre valores relacionados
-                if (values.length > 1) {
-                    for (let i = 0; i < values.length; i++) {
-                        for (let j = i + 1; j < values.length; j++) {
-                            // Conectar valores com importância similar
-                            if (Math.abs(values[i].importance - values[j].importance) <= 3) {
-                                createConnection(values[i], values[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Criar conexão entre dois valores
-            function createConnection(value1, value2) {
-                const x1 = value1.x;
-                const y1 = value1.y;
-                const x2 = value2.x;
-                const y2 = value2.y;
-                
-                // Calcular distância e ângulo
-                const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-                
-                // Criar linha de conexão
-                const connection = document.createElement('div');
-                connection.className = 'connection-line';
-                connection.style.width = `${distance}%`;
-                connection.style.left = `${x1}%`;
-                connection.style.top = `${y1}%`;
-                connection.style.transform = `rotate(${angle}deg)`;
-                
-                // Opacidade baseada na similaridade de importância
-                const importanceDiff = Math.abs(value1.importance - value2.importance);
-                const opacity = 1 - (importanceDiff / 10);
-                connection.style.opacity = opacity;
-                
-                mapVisualization.appendChild(connection);
             }
             
             // Selecionar valor
@@ -980,26 +1058,11 @@
                 renderMap();
             }
             
-            // Permitir soltar valores no mapa
-            mapVisualization.addEventListener('dragover', function(e) {
-                e.preventDefault();
-            });
-            
-            mapVisualization.addEventListener('drop', function(e) {
-                e.preventDefault();
-                const valueId = parseInt(e.dataTransfer.getData('text/plain'));
-                const value = values.find(v => v.id === valueId);
-                
-                if (value) {
-                    // Calcular posição relativa
-                    const rect = mapVisualization.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    const y = ((e.clientY - rect.top) / rect.height) * 100;
-                    
-                    value.x = Math.max(5, Math.min(95, x));
-                    value.y = Math.max(5, Math.min(95, y));
-                    
-                    saveValuesToStorage();
+            // Permitir mover valores no mapa com cliques
+            mapVisualization.addEventListener('click', function(e) {
+                if (e.target === mapVisualization) {
+                    selectedValue = null;
+                    renderValues();
                     renderMap();
                 }
             });
@@ -1022,32 +1085,44 @@
         
         // ========== EXERCÍCIO DE PROJEÇÃO FENOMENOLÓGICA ==========
         function initPhenomenologicalExercise() {
-            const editRulesBtn = document.getElementById('editRulesBtn');
+            const saveRulesBtn = document.getElementById('saveRulesBtn');
             const generateScenarioBtn = document.getElementById('generateScenarioBtn');
             const answerElements = document.querySelectorAll('.rule-answer');
             const scenarioVisualization = document.getElementById('scenarioVisualization');
             
+            // Configurar edição direta
+            answerElements.forEach(el => {
+                el.addEventListener('click', function() {
+                    if (this.textContent === 'Clique para editar') {
+                        this.textContent = '';
+                    }
+                    this.classList.add('editing');
+                    this.focus();
+                });
+                
+                el.addEventListener('blur', function() {
+                    this.classList.remove('editing');
+                    if (!this.textContent.trim()) {
+                        this.textContent = 'Clique para editar';
+                    }
+                    saveAnswersToStorage();
+                });
+                
+                el.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                });
+            });
+            
             // Carregar respostas salvas
             loadAnswersFromStorage();
             
-            // Editar regras
-            editRulesBtn.addEventListener('click', function() {
-                const answers = {};
-                
-                answerElements.forEach(el => {
-                    const id = el.id;
-                    const currentValue = el.textContent === 'Clique para editar' ? '' : el.textContent;
-                    const question = el.previousElementSibling.textContent;
-                    
-                    const newValue = prompt(`${question}\n\nDigite sua resposta:`, currentValue);
-                    
-                    if (newValue !== null) {
-                        el.textContent = newValue.trim() || 'Clique para editar';
-                        answers[id] = el.textContent;
-                    }
-                });
-                
+            // Salvar regras
+            saveRulesBtn.addEventListener('click', function() {
                 saveAnswersToStorage();
+                alert('Respostas salvas com sucesso!');
             });
             
             // Gerar cenário
@@ -1066,8 +1141,8 @@
                     scenarioVisualization.innerHTML = `
                         <div style="color: #D4AF37; text-align: center;">
                             <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 15px;"></i>
-                            <p>Complete todas as regras antes de visualizar o cenário.</p>
-                            <p>Clique no botão "Editar Regras" para preencher suas respostas.</p>
+                            <p>Complete todas as respostas antes de visualizar o cenário.</p>
+                            <p>Clique em cada item para editar diretamente.</p>
                         </div>
                     `;
                     return;
