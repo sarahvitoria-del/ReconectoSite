@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Vocacional - Reconecto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* REUTILIZAÇÃO DOS SEUS ESTILOS - Mantém a identidade visual */
+        :root {
+            --preto: #0A0A0A;
+            --dourado: #D4AF37;
+            --branco: #F5F5F5;
+            --cinza: #404040;
+            --bege: #F0E6D2;
+            --cinza-escuro: #1A1A1A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--cinza-escuro);
+            border-radius: 20px;
+            border: 2px solid var(--dourado);
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--cinza);
+        }
+        .header h1 {
+            color: var(--dourado);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+        .header p { color: var(--bege); font-size: 1.1rem; }
+        .content-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid var(--cinza);
+        }
+        .section-title {
+            color: var(--dourado);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i { margin-right: 15px; }
+        .construto-box {
+            background: rgba(212, 175, 55, 0.05);
+            border-left: 4px solid var(--dourado);
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+        .construto-box strong { color: var(--dourado); }
+        .btn-container { text-align: center; margin-top: 30px; }
+        .btn-principal {
+            background: linear-gradient(135deg, var(--dourado), #b8941f);
+            color: var(--preto);
+            border: none;
+            border-radius: 10px;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        .btn-principal:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5);
+        }
+        .btn-principal i { margin-right: 12px; font-size: 1.4rem; }
+        .aviso {
+            text-align: center;
+            color: var(--bege);
+            font-size: 0.9rem;
+            margin-top: 25px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        .link-externo {
+            color: var(--dourado);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--dourado);
+            transition: all 0.3s ease;
+        }
+        .link-externo:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-map-signs"></i> Direcionamento Vocacional</h1>
+            <p>Integre os insights da sua jornada fenomenológica com a exploração de caminhos profissionais.</p>
+        </div>
+
+        <div class="content-box">
+            <h3 class="section-title"><i class="fas fa-brain"></i> Aplicando a Epoché ao Teste</h3>
+            <p>Antes de acessar o teste, lembre-se da prática do <strong>parenteseamento</strong>. Você não <em>é</em> os resultados do teste; eles são <em>dados observáveis</em> sobre seus interesses atuais.</p>
+            
+            <div class="construto-box">
+                <p><strong>Construto para observar:</strong> "Uma carreira é uma identidade fixa e definitiva".<br>
+                <strong>Observe sem se identificar:</strong> "Estou tendo o pensamento de que este teste vai me definir. Vou colocar essa expectativa entre parênteses e apenas observar as perguntas com curiosidade."</p>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <h3 class="section-title"><i class="fas fa-tasks"></i> O que esperar do teste</h3>
+            <p>Você será redirecionado para a plataforma <strong><a href="https://www.carrerium.com/" target="_blank" class="link-externo">Careerium</a></strong>, um parceiro externo especializado em orientação profissional.</p>
+            <ul style="color: var(--bege); margin-left: 20px; margin-top: 15px;">
+                <li>O teste é gratuito e leva cerca de 10-15 minutos.</li>
+                <li>Você responderá perguntas sobre seus interesses, habilidades e preferências.</li>
+                <li>Ao final, receberá um relatório com áreas profissionais sugeridas.</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Sua missão fenomenológica:</strong> Ao ler o relatório, pratique a <strong>análise semiótica</strong>. Desmonte os signos (nomes das profissões). Que imagens, sensações ou preconceitos cada uma evoca em você?</p>
+        </div>
+
+        <div class="btn-container">
+            <button id="btnIrParaTeste" class="btn-principal">
+                <i class="fas fa-external-link-alt"></i> Fazer o Teste Vocacional no Careerium
+            </button>
+            <p class="aviso">Você será redirecionado para um site externo. Lembre-se de retornar ao Reconecto para refletir sobre os resultados em seu Diário Fenomenológico.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('btnIrParaTeste').addEventListener('click', function() {
+            // Redireciona para o site do Careerium
+            window.location.href = 'https://www.carrerium.com/';
+            // Opcional: Abrir em uma nova aba
+            // window.open('https://www.carrerium.com/', '_blank');
+        });
+
+        // Pequena interação: destaca o construto-box ao passar o mouse
+        document.querySelector('.construto-box').addEventListener('mouseenter', function() {
+            this.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+        });
+        document.querySelector('.construto-box').addEventListener('mouseleave', function() {
+            this.style.backgroundColor = 'rgba(212, 175, 55, 0.05)';
+        });
+    </script>
+</body>
+</html>
